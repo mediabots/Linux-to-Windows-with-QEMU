@@ -17,11 +17,11 @@ NC='\033[0m'
 sudo mkdir /mediabots /floppy /virtio
 #link2_status=$(curl -Is https://archive.org/download/WS2012R2/WS2012R2.ISO | grep HTTP | cut -f2 -d" ")
 ##link2_status=$(curl -Is https://ia601506.us.archive.org/4/items/WS2012R2/WS2012R2.ISO | grep HTTP | cut -f2 -d" ")
-#sudo wget -P /mediabots https://archive.org/download/WS2012R2/WS2012R2.ISO # Windows Server 2012 R2 
+#sudo wget -P /mediabots https://archive.org/download/WS2012R2/WS2012R2.ISO # Windows Server 2012 R2
 sudo wget -P /mediabots http://51.15.226.83/WS2012R2.ISO
 sudo wget -P /floppy https://ftp.mozilla.org/pub/firefox/releases/64.0/win32/en-US/Firefox%20Setup%2064.0.exe
 sudo mv /floppy/'Firefox Setup 64.0.exe' /floppy/Firefox.exe
-sudo wget -P /floppy https://downloadmirror.intel.com/23073/eng/PROWinx64.exe # Intel Network Adapter for Windows Server 2012 R2 
+sudo wget -P /floppy https://downloadmirror.intel.com/23073/eng/PROWinx64.exe # Intel Network Adapter for Windows Server 2012 R2
 # Powershell script to auto enable remote desktop for administrator
 sudo touch /floppy/EnableRDP.ps1
 sudo echo -e "Set-ItemProperty 'HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server\' -Name \"fDenyTSConnections\" -Value 0" >> /floppy/EnableRDP.ps1
@@ -64,10 +64,10 @@ freeDisk=$(df | grep "^/dev/" | awk '{print$1 " " $4}' | sort -g -k 2 | tail -1 
 # Windows required at least 25 GB free disk space
 firstDiskLow=0
 if [ $(expr $freeDisk / 1024 / 1024 ) -ge 25 ]; then
-	newDisk=$(expr $freeDisk \* 90 / 100 / 1024)
-	if [ $(expr $newDisk / 1024 ) -lt 25 ] ; then newDisk=25600 ; fi
+        newDisk=$(expr $freeDisk \* 90 / 100 / 1024)
+        if [ $(expr $newDisk / 1024 ) -lt 25 ] ; then newDisk=25600 ; fi
 else
-	firstDiskLow=1
+        firstDiskLow=1
 fi
 #
 # setting up default values
@@ -81,112 +81,112 @@ partition=0
 other_drives=""
 if [ $diskNumbers -eq 1 ] ; then # opened 1st if
 if [ $availableRAM -ge 4650 ] ; then # opened 2nd if
-	echo -e "${BLUE}For below option pass${NC} yes ${BLUE}iff, your VPS/Server came with${NC} boot system in ${NC}${RED}'RESCUE'${NC} mode ${BLUE}feature${NC}"
-	read -r -p "Do you want to completely delete your current Linux O.S.? (yes/no) : " deleteLinux
-	deleteLinux=$(echo "$deleteLinux" | head -c 1)
-	if [ ! -z $deleteLinux ] && [ $deleteLinux = 'Y' -o $deleteLinux = 'y' ] ; then
-		echo "erasing primary disk data"
-		sudo dd if=/dev/zero of=$firstDisk bs=1M count=1 # blank out the disk
-		echo "mounting devices"
-		mount -t tmpfs -o size=4500m tmpfs /mnt
-		mv /mediabots/* /mnt
-		mkdir /media/sw
-		mount -t tmpfs -o size=121m tmpfs /media/sw
-		mv /sw.iso /media/sw
-		custom_param_os="/mnt/"$(ls /mnt)
-		custom_param_sw="/media/sw/sw.iso"
-		availableRAM=$(free -m | tail -2 | head -1 | awk '{print $7}')
-		custom_param_disk=$firstDisk
-		custom_param_ram="-m "$(expr $availableRAM - 150 )"M"
-		mounted=1
-	else
-		if [ $firstDiskLow = 0 ] ; then
-			if [ $partNumbers -gt 1 ] ; then 
-				idx=0
-				ix=0
-				for i in $(fdisk -l | grep "^/dev/" | tr -d "*" | tr -s '[:space:]' | cut -f5 -d" "); do
-				b=($(fdisk -l | grep "^/dev/" | tr -d "*" | tr -s '[:space:]' | cut -f1 -d" ")) 
-				if [[ $i == *"G"  ]]; then a=$(echo $i | tr -d "G"); a=${a%.*} ; if [ $a -ge 25 -a $ix = 0 -a ${b[idx]} != $os ] ; then firstDisk=${b[idx]} ; custom_param_disk=$firstDisk ; partition=1 ; ix=$((ix+3)) ; elif [ $a -ge 25 -a $ix = 3 -a ${b[idx]} != $os ] ; then other_drives="-drive file=${b[idx]},index=$ix,media=disk " ; fi ; fi ;
-				idx=$((idx+1));
-				done
-				if [ $partition = 0 ] ;then 
-					echo "creating disk image"
-					sudo dd if=/dev/zero of=/disk.img bs=1024k seek=$newDisk count=0
-					custom_param_disk="/disk.img"
-				fi
-			else
-				echo "creating disk image"
-				sudo dd if=/dev/zero of=/disk.img bs=1024k seek=$newDisk count=0
-				custom_param_disk="/disk.img"
-			fi
-		else
-			skipped=1
-		fi
-	fi
+        echo -e "${BLUE}For below option pass${NC} yes ${BLUE}iff, your VPS/Server came with${NC} boot system in ${NC}${RED}'RESCUE'${NC} mode ${BLUE}feature${NC}"
+        read -r -p "Do you want to completely delete your current Linux O.S.? (yes/no) : " deleteLinux
+        deleteLinux=$(echo "$deleteLinux" | head -c 1)
+        if [ ! -z $deleteLinux ] && [ $deleteLinux = 'Y' -o $deleteLinux = 'y' ] ; then
+                echo "erasing primary disk data"
+                sudo dd if=/dev/zero of=$firstDisk bs=1M count=1 # blank out the disk
+                echo "mounting devices"
+                mount -t tmpfs -o size=4500m tmpfs /mnt
+                mv /mediabots/* /mnt
+                mkdir /media/sw
+                mount -t tmpfs -o size=121m tmpfs /media/sw
+                mv /sw.iso /media/sw
+                custom_param_os="/mnt/"$(ls /mnt)
+                custom_param_sw="/media/sw/sw.iso"
+                availableRAM=$(free -m | tail -2 | head -1 | awk '{print $7}')
+                custom_param_disk=$firstDisk
+                custom_param_ram="-m "$(expr $availableRAM - 150 )"M"
+                mounted=1
+        else
+                if [ $firstDiskLow = 0 ] ; then
+                        if [ $partNumbers -gt 1 ] ; then
+                                idx=0
+                                ix=0
+                                for i in $(fdisk -l | grep "^/dev/" | tr -d "*" | tr -s '[:space:]' | cut -f5 -d" "); do
+                                b=($(fdisk -l | grep "^/dev/" | tr -d "*" | tr -s '[:space:]' | cut -f1 -d" "))
+                                if [[ $i == *"G"  ]]; then a=$(echo $i | tr -d "G"); a=${a%.*} ; if [ $a -ge 25 -a $ix = 0 -a ${b[idx]} != $os ] ; then firstDisk=${b[idx]} ; custom_param_disk=$firstDisk ; partition=1 ; ix=$((ix+3)) ; elif [ $a -ge 25 -a $ix = 3 -a ${b[idx]} != $os ] ; then other_drives="-drive file=${b[idx]},index=$ix,media=disk " ; fi ; fi ;
+                                idx=$((idx+1));
+                                done
+                                if [ $partition = 0 ] ;then
+                                        echo "creating disk image"
+                                        sudo dd if=/dev/zero of=/disk.img bs=1024k seek=$newDisk count=0
+                                        custom_param_disk="/disk.img"
+                                fi
+                        else
+                                echo "creating disk image"
+                                sudo dd if=/dev/zero of=/disk.img bs=1024k seek=$newDisk count=0
+                                custom_param_disk="/disk.img"
+                        fi
+                else
+                        skipped=1
+                fi
+        fi
 else
-	if [ $firstDiskLow = 0 ] ; then
-		if [ $partNumbers -gt 1 ] ; then 
-			idx=0
-			ix=0
-			for i in $(fdisk -l | grep "^/dev/" | tr -d "*" | tr -s '[:space:]' | cut -f5 -d" "); do
-			b=($(fdisk -l | grep "^/dev/" | tr -d "*" | tr -s '[:space:]' | cut -f1 -d" ")) 
-			if [[ $i == *"G"  ]]; then a=$(echo $i | tr -d "G"); a=${a%.*} ; if [ $a -ge 25 -a $ix = 0 -a ${b[idx]} != $os ] ; then firstDisk=${b[idx]} ; custom_param_disk=$firstDisk ; partition=1 ; ix=$((ix+3)) ; elif [ $a -ge 25 -a $ix = 3 -a ${b[idx]} != $os ] ; then other_drives="-drive file=${b[idx]},index=$ix,media=disk " ; fi ; fi ;
-			idx=$((idx+1));
-			done
-			if [ $partition = 0 ] ;then 
-				echo "creating disk image"
-				sudo dd if=/dev/zero of=/disk.img bs=1024k seek=$newDisk count=0
-				custom_param_disk="/disk.img"
-			fi
-		else
-			echo "creating disk image"
-			sudo dd if=/dev/zero of=/disk.img bs=1024k seek=$newDisk count=0
-			custom_param_disk="/disk.img"
-		fi
-	else
-		skipped=1
-	fi
+        if [ $firstDiskLow = 0 ] ; then
+                if [ $partNumbers -gt 1 ] ; then
+                        idx=0
+                        ix=0
+                        for i in $(fdisk -l | grep "^/dev/" | tr -d "*" | tr -s '[:space:]' | cut -f5 -d" "); do
+                        b=($(fdisk -l | grep "^/dev/" | tr -d "*" | tr -s '[:space:]' | cut -f1 -d" "))
+                        if [[ $i == *"G"  ]]; then a=$(echo $i | tr -d "G"); a=${a%.*} ; if [ $a -ge 25 -a $ix = 0 -a ${b[idx]} != $os ] ; then firstDisk=${b[idx]} ; custom_param_disk=$firstDisk ; partition=1 ; ix=$((ix+3)) ; elif [ $a -ge 25 -a $ix = 3 -a ${b[idx]} != $os ] ; then other_drives="-drive file=${b[idx]},index=$ix,media=disk " ; fi ; fi ;
+                        idx=$((idx+1));
+                        done
+                        if [ $partition = 0 ] ;then
+                                echo "creating disk image"
+                                sudo dd if=/dev/zero of=/disk.img bs=1024k seek=$newDisk count=0
+                                custom_param_disk="/disk.img"
+                        fi
+                else
+                        echo "creating disk image"
+                        sudo dd if=/dev/zero of=/disk.img bs=1024k seek=$newDisk count=0
+                        custom_param_disk="/disk.img"
+                fi
+        else
+                skipped=1
+        fi
 fi # 2nd if closed
 else # 1st if else
 if [ $availableRAM -ge 4650 ] ; then
-	read -r -p "Do you want to completely delete your current Linux O.S.? (yes/no) : " deleteLinux
-	deleteLinux=$(echo "$deleteLinux" | head -c 1)
-	if [ ! -z $deleteLinux ] && [ $deleteLinux = 'Y' -o $deleteLinux = 'y' ] ; then
-		echo "erasing primary disk data"
-		sudo dd if=/dev/zero of=$firstDisk bs=1M count=1 # blank out the disk
-		echo "mounting devices"
-		mount -t tmpfs -o size=4500m tmpfs /mnt
-		mv /mediabots/* /mnt
-		mkdir /media/sw
-		mount -t tmpfs -o size=121m tmpfs /media/sw
-		mv /sw.iso /media/sw
-		custom_param_os="/mnt/"$(ls /mnt)
-		custom_param_sw="/media/sw/sw.iso"
-		availableRAM=$(free -m | tail -2 | head -1 | awk '{print $7}')
-		custom_param_disk=$firstDisk
-		custom_param_ram="-m "$(expr $availableRAM - 150 )"M"
-		mounted=1
-	else
-		echo "using secondary disk for installation."
-		custom_param_disk=$(fdisk -l | grep "Disk /dev/" | awk 'NR==2' | cut -f2 -d" " | cut -f1 -d":") # 2nd disk chosen
-	fi
+        read -r -p "Do you want to completely delete your current Linux O.S.? (yes/no) : " deleteLinux
+        deleteLinux=$(echo "$deleteLinux" | head -c 1)
+        if [ ! -z $deleteLinux ] && [ $deleteLinux = 'Y' -o $deleteLinux = 'y' ] ; then
+                echo "erasing primary disk data"
+                sudo dd if=/dev/zero of=$firstDisk bs=1M count=1 # blank out the disk
+                echo "mounting devices"
+                mount -t tmpfs -o size=4500m tmpfs /mnt
+                mv /mediabots/* /mnt
+                mkdir /media/sw
+                mount -t tmpfs -o size=121m tmpfs /media/sw
+		                mv /sw.iso /media/sw
+                custom_param_os="/mnt/"$(ls /mnt)
+                custom_param_sw="/media/sw/sw.iso"
+                availableRAM=$(free -m | tail -2 | head -1 | awk '{print $7}')
+                custom_param_disk=$firstDisk
+                custom_param_ram="-m "$(expr $availableRAM - 150 )"M"
+                mounted=1
+        else
+                echo "using secondary disk for installation."
+                custom_param_disk=$(fdisk -l | grep "Disk /dev/" | awk 'NR==2' | cut -f2 -d" " | cut -f1 -d":") # 2nd disk chosen
+        fi
 else
-	echo "using secondary disk for installation.."
-	custom_param_disk=$(fdisk -l | grep "Disk /dev/" | awk 'NR==2' | cut -f2 -d" " | cut -f1 -d":")
+        echo "using secondary disk for installation.."
+        custom_param_disk=$(fdisk -l | grep "Disk /dev/" | awk 'NR==2' | cut -f2 -d" " | cut -f1 -d":")
 fi
 fi # closed 1st if
 # Adding other disks only if multi partitions are not exist
 if [ $partition = 0 ] ; then
 ix=2
 if [ $custom_param_disk != "/disk.img" ] ; then
-	for i in $(fdisk -l | grep "Disk /dev/" | cut -f2 -d" " | cut -f1 -d ":") ; do
-	if [ $i != $custom_param_disk ];then 
-	#echo $i;
-	ix=$((ix+1))
-	other_drives=$other_drives"-drive file=$i,index=$ix,media=disk "
-	if [ $ix = 3 ]; then break; fi
-	fi
-	done
+        for i in $(fdisk -l | grep "Disk /dev/" | cut -f2 -d" " | cut -f1 -d ":") ; do
+        if [ $i != $custom_param_disk ];then
+        #echo $i;
+        ix=$((ix+1))
+        other_drives=$other_drives"-drive file=$i,index=$ix,media=disk "
+        if [ $ix = 3 ]; then break; fi
+        fi
+        done
 fi
 fi
 #
@@ -194,7 +194,7 @@ fi
 echo "[ Running the KVM ]"
 if [ $skipped = 0 ] ; then
 echo "[.] running QEMU-KVM"
-sudo /tmp/qemu-system-x86_64 -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk -drive file=$custom_param_os,index=1,media=cdrom -drive file=$custom_param_sw,index=2,media=cdrom $other_drives -boot once=d -vnc :0 &	
+sudo /tmp/qemu-system-x86_64 -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk -drive file=$custom_param_os,index=1,media=cdrom -drive file=$custom_param_sw,index=2,media=cdrom $other_drives -boot once=d -vnc :0 &
 # [note- no sudo should be used after that]
 #pidqemu=$(pgrep qemu) # does not work
 pid=$(echo $! | head -1)
@@ -204,7 +204,7 @@ echo -e "wget -P /tmp http://51.15.226.83/vkvm.tar.gz && tar -C /tmp -zxvf /tmp/
 echo -e "${YELLOW} SAVE BELOW GREEN COLORED COMMAND IN A SAFE LOCATION FOR FUTURE USAGE${NC}"
 echo -e "${GREEN_D}wget -P /tmp http://51.15.226.83/vkvm.tar.gz && tar -C /tmp -zxvf /tmp/vkvm.tar.gz && rm vkvm.tar.gz && /tmp/qemu-system-x86_64 -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk $other_drives -boot c -vnc :0 & disown %1${NC}"
 echo -e "${BLUE}comamnd also saved in /details.txt file${NC}"
-echo -e "${YELLOW}Now download VNC App from here :${NC} https://www.realvnc.com/en/connect/download/vnc/\n${YELLOW}Then install it on your computer${NC}" 
+echo -e "${YELLOW}Now download VNC App from here :${NC} https://www.realvnc.com/en/connect/download/vnc/\n${YELLOW}Then install it on your computer${NC}"
 echo -e "Finally open ${GREEN_D}$ip:0${NC} on your VNC viewer."
 if [ $mounted = 1 ]; then
 read -r -p "Had your Windows Server setup completed successfully? (yes/no) : " setup_initial
@@ -212,7 +212,7 @@ setup_initial=$(echo "$setup_initial" | head -c 1)
 sleep 10
 if [ ! -z $setup_initial ] && [ $setup_initial = 'Y' -o $setup_initial = 'y' ] ; then
 echo $pid $cpus $custom_param_disk $custom_param_sw $other_drives
-echo "helper called" 
+echo "helper called"
 for i in $(ps aux | grep -i "qemu-system" | head -2 | cut -f7 -d" ") ; do echo "killing process id : "$i ; kill -9 $i ; done
 #sleep 30
 echo "un-mounting"
@@ -231,12 +231,13 @@ pid2=$(echo $! | head -1)
 disown -h $pid2
 echo "disowned PID : "$pid2
 echo -e "${YELLOW} SAVE BELOW GREEN COLORED COMMAND IN A SAFE LOCATION FOR FUTURE USAGE${NC}"
+echo -e "${YELLOW} SAVE BELOW GREEN COLORED COMMAND IN A SAFE LOCATION FOR FUTURE USAGE${NC}"
 echo -e "${GREEN}wget -P /tmp http://51.15.226.83/vkvm.tar.gz && tar -C /tmp -zxvf /tmp/vkvm.tar.gz && rm vkvm.tar.gz && /tmp/qemu-system-x86_64 -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram2 -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk $other_drives -boot c -vnc :0 & disown %1${NC}"
 echo -e "Now you can access your Windows server through \"VNC viewer\" or \"Remote Desktop Application\" (if your server 'Remote Desktop' is enabled)."
 echo "Job Done :)"
 fi
 else
-echo -e "${YELLOW}Now download VNC App from here :${NC} https://www.realvnc.com/en/connect/download/vnc/\n${YELLOW}Then install it on your computer${NC}" 
+echo -e "${YELLOW}Now download VNC App from here :${NC} https://www.realvnc.com/en/connect/download/vnc/\n${YELLOW}Then install it on your computer${NC}"
 echo -e "Finally open ${GREEN_D}$ip:0${NC} on your VNC viewer."
 echo "Job Done :)"
 fi
