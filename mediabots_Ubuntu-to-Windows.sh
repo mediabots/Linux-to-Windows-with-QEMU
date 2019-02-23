@@ -236,8 +236,6 @@ echo -e "Now you can access your Windows server through \"VNC viewer\" or \"Remo
 echo "Job Done :)"
 fi
 else
-echo -e "${YELLOW}Now download VNC App from here :${NC} https://www.realvnc.com/en/connect/download/vnc/\n${YELLOW}Then install it on your computer${NC}" 
-echo -e "Finally open ${GREEN_D}$ip:0${NC} on your VNC viewer."
 echo "Job Done :)"
 fi
 else
