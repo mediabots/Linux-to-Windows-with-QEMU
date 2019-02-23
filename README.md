@@ -111,6 +111,7 @@ Your Server/VPS Free RAM size < 5 GB
 
 ## Demo Screenshots
 
+https://imgur.com/a/dnIUUzF (18 images included)
 
 ---
 
@@ -125,7 +126,7 @@ Will be added soon
 For few cases, due to RAID configuration of the hard disk, if you had chosen to delete existing Linux OS & install Windows OS on entire hard disk.
 On your VNC , you might see, Windows installation failing.
 
-If you are facing such issue; Exit from the script & Re0run it & in this time just opt for installing Windows OS without deleting Linux OS. And it would work :D
+If you are facing such issue; Exit from the script & Re-run it & in this time just opt for installing Windows OS without deleting Linux OS. And it would work :D
 
 In case, portable QEMU-KVM app stopped/closed, your Widows-Server would not be accessible.
 To access it again, you require to run the QEMU-KVM app again with proper parameters.
