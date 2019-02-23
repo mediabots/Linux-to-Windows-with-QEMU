@@ -1,4 +1,4 @@
-# Ubuntu-to-Windows-with-QEMU
+# Linux-to-Windows-with-QEMU
 
 A Shell Script to Auto install Windows Server on your Linux System. [Right now, it supports 2012 R2 < evaluation/180 days trial > copy]
 
@@ -8,10 +8,10 @@ Since QEMU is a portable s/w, so it can reside in temporary RAM.
 Actually script is semi-automatic.
 All Linux commands part(such as downloading Windows ISO image, gathering system info, choosing disk/partition, managing RAM , attaching required windows s/w in CDROM) would be handled by script automatically.
 
-And rest of the windows part(clicking , setting Administrator password ) need to be done manually by any Free VNC windows software.
+And rest of the windows part(clicking, selecting, setting Administrator password ) need to be done manually by any Free VNC windows software.
 
-After Windows Installation completed , you would find a Power Shell script under CD-ROM, called "EnableRDP.ps1".
-By running it you would be able to enable Remote Desktop on your windows server, so after that you would be able to get connect your Windows server through Windows "Remote Desktop Application" App :)
+After Windows Installation completed, you would find a Power Shell script under CD-ROM, called "EnableRDP.ps1".
+By running it you would be able to enable Remote Desktop on your Windows server, so after that you would be able to connect your Windows server through Windows "Remote Desktop Application" App :)
 
 I also attached Firefox App on CD-ROM, install that, so you don't need to face "Internet Explorer" horrible setting experience!
 
