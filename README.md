@@ -115,6 +115,22 @@ Will be added soon
 
 ## Disclaimer
 
+For few cases, due to RAID configuration of the hard disk, if you had chosen to delete existing Linux OS & install Windows OS on entire hard disk.
+On your VNC , you might see, Windows installtion failing.
+If you are facing such issue; just opt for installing Windows OS without deleting Linux OS. And it would work :D
+
+In case, portable QEMU-KVM app stopped/closed, your Widows-Server would not be accessable.
+To access it again, you require to run the QEMU-KVM app again with proper parameters.
+Run below coammnd :
+`cat /deatils.txt`
+
+copy the ouput of the above result & paste it and press Enter button.
+It would run the QEMU-KVM again. So your Windows Server would be accessable again :D
+
+If you required a reboot of your Windows Server , just reboot it from Windows Server reboot option. 
+Don't reboot your server from Server Hosting Control-panel. Otherwise QEMU app would get stopped.
+
+
 ---
 
 ## Reference
