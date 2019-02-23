@@ -143,6 +143,14 @@ Don't reboot your server from Server Hosting Control-panel. Otherwise QEMU App w
 If you had opted for removing your old Linux OS, you would get Windows server with full HDD capacity.
 But RAM would not be full, because QEMU resides on RAM.
 
+---
+## Updates
+
+Right now, Script for Ubuntu Distro only.
+
+But very soon I would add the support for all other Linux Distros too.
+
+So stay tuned.
 
 ---
 
