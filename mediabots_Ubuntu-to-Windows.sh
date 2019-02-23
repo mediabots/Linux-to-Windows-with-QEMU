@@ -2,22 +2,22 @@
 #
 # installing required Ubuntu packages
 printf "Y\n" | apt install sudo -y
-sudo apt install vim genisoimage -y
+sudo apt install vim genisoimage curl -y
 #
 #Vars
 mounted=0
-# updating System
-#sudo apt-get update
-#sudo DEBIAN_FRONTEND=noninteractive apt-get --yes upgrade 
-#sudo apt-get --yes dist-upgrade
+GREEN='\033[1;32m'
+GREEN_D='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+NC='\033[0m'
 #
 # Downloading resources
 sudo mkdir /mediabots /floppy /virtio
-#link1_status=$(curl -Is https://mediabots.ml/WS2012R2.ISO | grep HTTP | cut -f2 -d" ")
 #link2_status=$(curl -Is https://archive.org/download/WS2012R2/WS2012R2.ISO | grep HTTP | cut -f2 -d" ")
 ##link2_status=$(curl -Is https://ia601506.us.archive.org/4/items/WS2012R2/WS2012R2.ISO | grep HTTP | cut -f2 -d" ")
-#link3_status=$(curl -Is https://mediabots.cf/WS2012R2.ISO | grep HTTP | cut -f2 -d" ")
-#sudo wget -P /mediabots http://mediabots.cf/WS2012R2.ISO # https://archive.org/download/WS2012R2/WS2012R2.ISO ; https://mediabots.ml/WS2012R2.ISO # Windows Server 2012 R2 
+#sudo wget -P /mediabots https://archive.org/download/WS2012R2/WS2012R2.ISO # Windows Server 2012 R2 
 sudo wget -P /mediabots http://51.15.226.83/WS2012R2.ISO
 sudo wget -P /floppy https://ftp.mozilla.org/pub/firefox/releases/64.0/win32/en-US/Firefox%20Setup%2064.0.exe
 sudo mv /floppy/'Firefox Setup 64.0.exe' /floppy/Firefox.exe
@@ -42,12 +42,13 @@ echo "Downloading QEMU"
 sudo wget -qO- /tmp http://51.15.226.83/vkvm.tar.gz | sudo tar xvz -C /tmp
 # Virtualization checking..
 virtu=$(egrep '^flags.*(vmx|svm)' /proc/cpuinfo | wc -l)
-if [ $virtu = 0 ] ; then echo "[Error] Virtualization/KVM in your system is OFF"; fi
+if [ $virtu = 0 ] ; then echo -e "[Error] ${RED}Virtualization/KVM in your Server/VPS is OFF${NC}"; fi
 # Gathering System information
 idx=0
 fs=($(df | awk '{print $1}'))
 for j in $(df | awk '{print $6}');do if [ $j = "/" ] ; then os=${fs[$idx]};echo $os;fi;idx=$((idx+1));done
 #
+ip=$(curl ifconfig.me)
 virtualization=$(lscpu | grep Virtualization: | head -1 | cut -f2 -d":" | awk '{$1=$1;print}')
 echo "Virtualization : "$virtualization
 model=$(lscpu | grep "Model name:" | head -1 | cut -f2 -d":" | awk '{$1=$1;print}')
@@ -80,6 +81,7 @@ partition=0
 other_drives=""
 if [ $diskNumbers -eq 1 ] ; then # opened 1st if
 if [ $availableRAM -ge 4650 ] ; then # opened 2nd if
+	echo -e "${BLUE}For below option pass${NC} yes ${BLUE}iff, your VPS/Server came with${NC} boot system in ${NC}${RED}'RESCUE'${NC} mode ${BLUE}feature${NC}"
 	read -r -p "Do you want to completely delete your current Linux O.S.? (yes/no) : " deleteLinux
 	deleteLinux=$(echo "$deleteLinux" | head -c 1)
 	if [ ! -z $deleteLinux ] && [ $deleteLinux = 'Y' -o $deleteLinux = 'y' ] ; then
@@ -198,17 +200,18 @@ sudo /tmp/qemu-system-x86_64 -net nic -net user,hostfwd=tcp::3389-:3389 -show-cu
 pid=$(echo $! | head -1)
 disown -h $pid
 echo "disowned PID : "$pid
-#for i in $(ps aux | grep -i "qemu-system" | head -2 | cut -f7 -d" ") ; do if [ $i != $pid ] ;then pidqemu=$i; fi; done
-#echo "QEMU PID : "$pidqemu
-echo -e /tmp/qemu-system-x86_64 -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk -drive file=$custom_param_os,index=1,media=cdrom -drive file=$custom_param_sw,index=2,media=cdrom $other_drives -boot once=d -vnc :0 > /details.txt
-cat /details.txt
+echo -e "wget -P /tmp http://51.15.226.83/vkvm.tar.gz && tar -C /tmp -zxvf /tmp/vkvm.tar.gz && rm vkvm.tar.gz && /tmp/qemu-system-x86_64 -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk $other_drives -boot c -vnc :0 & disown %1" > /details.txt
+echo -e "${YELLOW} SAVE BELOW GREEN COLORED COMMAND IN A SAFE LOCATION FOR FUTURE USAGE${NC}"
+echo -e "${GREEN_D}wget -P /tmp http://51.15.226.83/vkvm.tar.gz && tar -C /tmp -zxvf /tmp/vkvm.tar.gz && rm vkvm.tar.gz && /tmp/qemu-system-x86_64 -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk $other_drives -boot c -vnc :0 & disown %1${NC}"
+echo -e "${BLUE}comamnd also saved in /details.txt file${NC}"
+echo -e "${YELLOW}Now download VNC App from here :${NC} https://www.realvnc.com/en/connect/download/vnc/\n${YELLOW}Then install it on your computer${NC}" 
+echo -e "Finally open ${GREEN_D}$ip:0${NC} on your VNC viewer."
 if [ $mounted = 1 ]; then
 read -r -p "Had your Windows Server setup completed successfully? (yes/no) : " setup_initial
 setup_initial=$(echo "$setup_initial" | head -c 1)
 sleep 10
 if [ ! -z $setup_initial ] && [ $setup_initial = 'Y' -o $setup_initial = 'y' ] ; then
 echo $pid $cpus $custom_param_disk $custom_param_sw $other_drives
-#sh ./helper.sh $pid $cpus $custom_param_disk $custom_param_sw $other_drives
 echo "helper called" 
 for i in $(ps aux | grep -i "qemu-system" | head -2 | cut -f7 -d" ") ; do echo "killing process id : "$i ; kill -9 $i ; done
 #sleep 30
@@ -220,19 +223,24 @@ sync; echo 3 > /proc/sys/vm/drop_caches
 free -m
 availableRAM=$(free -m | tail -2 | head -1 | awk '{print $7}')
 custom_param_ram="-m "$(expr $availableRAM - 150 )"M"
+custom_param_ram2="-m "$(expr $availableRAM - 500 )"M"
 echo $custom_param_ram
 echo "[..] running QEMU-KVM again"
 /tmp/qemu-system-x86_64 -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk -drive file=$custom_param_sw,index=1,media=cdrom $other_drives -boot c -vnc :0 &
 pid2=$(echo $! | head -1)
 disown -h $pid2
 echo "disowned PID : "$pid2
-echo -e /tmp/qemu-system-x86_64 -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk -drive file=$custom_param_sw,index=1,media=cdrom $other_drives -boot c -vnc :0
+echo -e "${YELLOW} SAVE BELOW GREEN COLORED COMMAND IN A SAFE LOCATION FOR FUTURE USAGE${NC}"
+echo -e "${GREEN}wget -P /tmp http://51.15.226.83/vkvm.tar.gz && tar -C /tmp -zxvf /tmp/vkvm.tar.gz && rm vkvm.tar.gz && /tmp/qemu-system-x86_64 -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram2 -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk $other_drives -boot c -vnc :0 & disown %1${NC}"
+echo -e "Now you can access your Windows server through \"VNC viewer\" or \"Remote Desktop Application\" (if your server 'Remote Desktop' is enabled)."
 echo "Job Done :)"
 fi
 else
+echo -e "${YELLOW}Now download VNC App from here :${NC} https://www.realvnc.com/en/connect/download/vnc/\n${YELLOW}Then install it on your computer${NC}" 
+echo -e "Finally open ${GREEN_D}$ip:0${NC} on your VNC viewer."
 echo "Job Done :)"
 fi
 else
-echo "Windows OS required at least 25GB free desk space. Your system does't have 25GB free space!"
+echo "Windows OS required at least 25GB free desk space. Your Server/VPS does't have 25GB free space!"
 echo "Exiting....."
 fi
