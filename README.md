@@ -41,9 +41,9 @@ Either should have access of root user OR run with su (super user)
 
 If you want to use your own Windows ISO copy.
 
-Then download official copy from https://www.microsoft.com/en-in/evalcenter/evaluate-windows-server-2012-r2 and upload it to your extra server & create a direct url and then replace LINE NO. 15 of mediabots_Ubuntu-to-Windows.sh with your DIRECT LINK
+Then download official copy from https://www.microsoft.com/en-in/evalcenter/evaluate-windows-server-2012-r2 and upload it to your extra server & create a direct url and then replace LINE NO. 21 of mediabots_Ubuntu-to-Windows.sh with your DIRECT LINK
 
-Script Line No. 15 :-
+Script Line No. 21 :-
 
 http://51.15.226.83/WS2012R2.ISO
 
@@ -130,8 +130,11 @@ Run below command :
 Copy the Output of the above result and Paste it & press Enter button.
 It would run the QEMU-KVM again. So your Windows Server would be accessible again :D
 
-If you required a reboot of your Windows Server , just reboot it from Windows Server reboot option. 
+If you required a reboot of your Windows Server, just reboot it from Windows Server reboot option. 
 Don't reboot your server from Server Hosting Control-panel. Otherwise QEMU App would get stopped.
+
+If you had opted for removing your old Linux OS, you would get Windows server with full HDD capacity.
+But RAM would not be full, because QEMU resides on RAM.
 
 
 ---
