@@ -69,24 +69,40 @@ CASE - 1
 Your Server/VPS Free RAM size > 5 GB
 
 If your system comes with more than 5GB free RAM, script would ask, whether do you want to delete your existing Linux OS(Ubuntu in this case).
+
 Go with that option only if "Rescue Boot" option is available in your Server Hosting Control-panel.
+
   Case - 1.a
+
   Suppose you proceed with that option, in that case, script would download Windows-ISO image & other stuffs in your system RAM.
+  
   Case - 1.b
+  
   Suppose you dont go with that option.
+  
   Script would first check, how many Disk are attached with your VPS/Server.
+    
     Case - 1.b.i  
+    
     If there are multi Disk.
+    
     Winodws-OS would be installed on your second Disk.
+    
     Case - 1.b.ii
+    
     If only one Disk attached, then it would check how many partitions(size > 25 GB) are present there.
+    
     If there are multi partitons(size > 25 GB). Windows-OS would be installed on second partition.
+    
     Else
+    
     If only one partion exist, and that partition has more than 30 GB free space. In that case ,it would create a "disk.img" file of 25 GB size for installing Windows-OS on that file.
 
 
 CASE - 2
+
 Your Server/VPS Free RAM size < 5 GB
+  
   start from <Case - 1.b>
 
 
