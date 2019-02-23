@@ -40,10 +40,12 @@ Either should have access of root user OR run with su (super user)
 ## Optional
 
 If you want to use your own Windows ISO copy.
-Then download it from https://www.microsoft.com/en-in/evalcenter/evaluate-windows-server-2012-r2 and upload it to your extra server & create a direct url and then replace LINE NO. 15 of mediabots_Ubuntu-to-Windows.sh
-Script Line No. 15 :-
-http://51.15.226.83/WS2012R2.ISO
 
+Then download it from https://www.microsoft.com/en-in/evalcenter/evaluate-windows-server-2012-r2 and upload it to your extra server & create a direct url and then replace LINE NO. 15 of mediabots_Ubuntu-to-Windows.sh
+
+Script Line No. 15 :-
+
+http://51.15.226.83/WS2012R2.ISO
 
 ---
 
@@ -104,5 +106,5 @@ Will be added soon
 
 ## Reference
 
-askubuntu.com, stackexchange.com, stackoverflow.com, ubuntuforums.com, tecmint.com, qemu.org, myrlse@wjunction 
+askubuntu.com, stackexchange.com, stackoverflow.com, ubuntuforums.com, tecmint.com, qemu.org, myrlse@wjunction, exchangepedia.com 
 
