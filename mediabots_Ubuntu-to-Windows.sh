@@ -200,9 +200,9 @@ sudo /tmp/qemu-system-x86_64 -net nic -net user,hostfwd=tcp::3389-:3389 -show-cu
 pid=$(echo $! | head -1)
 disown -h $pid
 echo "disowned PID : "$pid
-echo -e "wget -P /tmp http://51.15.226.83/vkvm.tar.gz && tar -C /tmp -zxvf /tmp/vkvm.tar.gz && rm vkvm.tar.gz && /tmp/qemu-system-x86_64 -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk $other_drives -boot c -vnc :0 & disown %1" > /details.txt
+echo -e "wget -P /tmp http://51.15.226.83/vkvm.tar.gz && tar -C /tmp -zxvf /tmp/vkvm.tar.gz && rm /tmp/vkvm.tar.gz && /tmp/qemu-system-x86_64 -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk $other_drives -boot c -vnc :0 & disown %1" > /details.txt
 echo -e "${YELLOW} SAVE BELOW GREEN COLORED COMMAND IN A SAFE LOCATION FOR FUTURE USAGE${NC}"
-echo -e "${GREEN_D}wget -P /tmp http://51.15.226.83/vkvm.tar.gz && tar -C /tmp -zxvf /tmp/vkvm.tar.gz && rm vkvm.tar.gz && /tmp/qemu-system-x86_64 -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk $other_drives -boot c -vnc :0 & disown %1${NC}"
+echo -e "${GREEN_D}wget -P /tmp http://51.15.226.83/vkvm.tar.gz && tar -C /tmp -zxvf /tmp/vkvm.tar.gz && /tmp/rm vkvm.tar.gz && /tmp/qemu-system-x86_64 -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk $other_drives -boot c -vnc :0 & disown %1${NC}"
 echo -e "${BLUE}comamnd also saved in /details.txt file${NC}"
 echo -e "${YELLOW}Now download VNC App from here :${NC} https://www.realvnc.com/en/connect/download/vnc/\n${YELLOW}Then install it on your computer${NC}" 
 echo -e "Finally open ${GREEN_D}$ip:0${NC} on your VNC viewer."
@@ -231,7 +231,7 @@ pid2=$(echo $! | head -1)
 disown -h $pid2
 echo "disowned PID : "$pid2
 echo -e "${YELLOW} SAVE BELOW GREEN COLORED COMMAND IN A SAFE LOCATION FOR FUTURE USAGE${NC}"
-echo -e "${GREEN}wget -P /tmp http://51.15.226.83/vkvm.tar.gz && tar -C /tmp -zxvf /tmp/vkvm.tar.gz && rm vkvm.tar.gz && /tmp/qemu-system-x86_64 -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram2 -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk $other_drives -boot c -vnc :0 & disown %1${NC}"
+echo -e "${GREEN}wget -P /tmp http://51.15.226.83/vkvm.tar.gz && tar -C /tmp -zxvf /tmp/vkvm.tar.gz && rm /tmp/vkvm.tar.gz && /tmp/qemu-system-x86_64 -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram2 -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk $other_drives -boot c -vnc :0 & disown %1${NC}"
 echo -e "Now you can access your Windows server through \"VNC viewer\" or \"Remote Desktop Application\" (if your server 'Remote Desktop' is enabled)."
 echo "Job Done :)"
 fi
