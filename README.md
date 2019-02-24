@@ -20,7 +20,7 @@ I also attached Firefox App on CD-ROM, install that, so you don't need to face "
 ## Requirements
 A SSH client such as Putty : https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html
 
-A VNC software such as RealVNC : https://www.realvnc.com/en/connect/download/vnc/
+A VNC software such as RealVNC : https://www.realvnc.com/en/connect/download/viewer/
 
 A VPS or Dedicated server with Ubuntu OS Installed.
 
