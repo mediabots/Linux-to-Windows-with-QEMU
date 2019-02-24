@@ -109,16 +109,20 @@ Your Server/VPS Free RAM size < 5 GB
 
 ---
 
-## Demo Screenshots
-
-https://imgur.com/a/dnIUUzF (18 images included)
-
----
-
 ## Demo Video
 
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=84gVQXXJF8A" target="_blank"><img src="http://img.youtube.com/vi/84gVQXXJF8A/0.jpg" 
 alt="Turn your Linux VPS or Server into Windows Server automatically using Shell script trough QEMU-KVM" width="480" height="360" border="10" /></a>
+
+OR
+
+http://bit.ly/Linux-to-Windows
+
+---
+
+## Screenshots
+
+https://imgur.com/a/w7WszdK (19 images included)
 
 ---
 
