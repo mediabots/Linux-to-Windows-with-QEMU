@@ -61,7 +61,7 @@ Just run below five commands one after another :
 
 `chmod +x /media/script/*`
 
-`/media/script/mediabots_Ubuntu-to-Windows.sh`
+`/media/script/mediabots_Linux-to-Windows.sh`
 
 ---
 
