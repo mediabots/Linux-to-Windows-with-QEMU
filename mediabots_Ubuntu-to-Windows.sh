@@ -1,18 +1,21 @@
 #!/bin/bash
 #
-# installing required Ubuntu packages
-printf "Y\n" | apt install sudo -y
-sudo apt install vim genisoimage curl -y
-#
 #Vars
 mounted=0
-GREEN='\033[1;32m'
-GREEN_D='\033[0;32m'
-RED='\033[0;31m'
-YELLOW='\033[0;33m'
-BLUE='\033[0;34m'
-NC='\033[0m'
+GREEN='\033[1;32m';GREEN_D='\033[0;32m';RED='\033[0;31m';YELLOW='\033[0;33m';BLUE='\033[0;34m';NC='\033[0m'
+# Virtualization checking..
+virtu=$(egrep '^flags.*(vmx|svm)' /proc/cpuinfo | wc -l)
+if [ $virtu = 0 ] ; then echo -e "[Error] ${RED}Virtualization/KVM in your Server/VPS is OFF\nExiting...${NC}";
+else
 #
+# Deleting Previous Windows Installation by the Script
+#umount -l /mnt /media/script /media/sw
+#rm -rf /mediabots /floppy /virtio /media/* /tmp/*
+#rm -f /sw.iso /disk.img 
+# installing required Ubuntu packages
+printf "Y\n" | apt install sudo -y
+sudo apt install vim curl genisoimage -y
+sudo ln -s /usr/bin/genisoimage /usr/bin/mkisofs
 # Downloading resources
 sudo mkdir /mediabots /floppy /virtio
 #link2_status=$(curl -Is https://archive.org/download/WS2012R2/WS2012R2.ISO | grep HTTP | cut -f2 -d" ")
@@ -38,13 +41,10 @@ sudo echo 1 > /sys/kernel/mm/ksm/run
 sync; sudo echo 3 > /proc/sys/vm/drop_caches
 # Downloading Portable QEMU-KVM
 echo "Downloading QEMU"
-#sudo wget -qO- /tmp https://ia601503.us.archive.org/12/items/vkvm.tar/vkvm.tar.gz | sudo tar xvz -C /tmp
 sudo apt-get update
 sudo apt-get install -y qemu-kvm
-# Virtualization checking..
-virtu=$(egrep '^flags.*(vmx|svm)' /proc/cpuinfo | wc -l)
-if [ $virtu = 0 ] ; then echo -e "[Error] ${RED}Virtualization/KVM in your Server/VPS is OFF${NC}"; fi
 # Gathering System information
+dist=$(lsb_release -a | head -1 | cut -f2 -d":")
 idx=0
 fs=($(df | awk '{print $1}'))
 for j in $(df | awk '{print $6}');do if [ $j = "/" ] ; then os=${fs[$idx]};echo $os;fi;idx=$((idx+1));done
@@ -56,7 +56,8 @@ model=$(lscpu | grep "Model name:" | head -1 | cut -f2 -d":" | awk '{$1=$1;print
 echo "CPU Model : "$model
 cpus=$(lscpu | grep CPU\(s\) | head -1 | cut -f2 -d":" | awk '{$1=$1;print}')
 echo "No. of CPU cores : "$cpus
-availableRAM=$(free -m | tail -2 | head -1 | awk '{print $7}')
+if [ $dist = "Debian" ] ;then availableRAMcommand="free -m | head -2 | tail -1 | awk '{print \$4}'" ; elif [ $dist = "Ubuntu" ] ;then availableRAMcommand="free -m | tail -2 | head -1 | awk '{print \$7}'"; fi
+availableRAM=$(echo $availableRAMcommand | bash)
 echo "Available RAM : "$availableRAM" MB"
 diskNumbers=$(fdisk -l | grep "Disk /dev/" | wc -l)
 partNumbers=$(fdisk -l | grep "^/dev/" | wc -l)
@@ -100,9 +101,10 @@ if [ $availableRAM -ge 4650 ] ; then # opened 2nd if
 		mv /sw.iso /media/sw
 		custom_param_os="/mnt/"$(ls /mnt)
 		custom_param_sw="/media/sw/sw.iso"
-		availableRAM=$(free -m | tail -2 | head -1 | awk '{print $7}')
+		availableRAM=$(echo $availableRAMcommand | bash)
 		custom_param_disk=$firstDisk
-		custom_param_ram="-m "$(expr $availableRAM - 150 )"M"
+		custom_param_ram="-m "$(expr $availableRAM - 500 )"M"
+		format=""
 		mounted=1
 	else
 		if [ $firstDiskLow = 0 ] ; then
@@ -111,20 +113,18 @@ if [ $availableRAM -ge 4650 ] ; then # opened 2nd if
 				ix=0
 				for i in $(fdisk -l | grep "^/dev/" | tr -d "*" | tr -s '[:space:]' | cut -f5 -d" "); do
 				b=($(fdisk -l | grep "^/dev/" | tr -d "*" | tr -s '[:space:]' | cut -f1 -d" ")) 
-				if [[ $i == *"G"  ]]; then a=$(echo $i | tr -d "G"); a=${a%.*} ; if [ $a -ge 25 -a $ix = 0 -a ${b[idx]} != $os ] ; then firstDisk=${b[idx]} ; custom_param_disk=$firstDisk ; partition=1 ; ix=$((ix+3)) ; elif [ $a -ge 25 -a $ix = 3 -a ${b[idx]} != $os ] ; then other_drives="-drive file=${b[idx]},index=$ix,media=disk " ; fi ; fi ;
+				if [[ $i == *"G"  ]]; then a=$(echo $i | tr -d "G"); a=${a%.*} ; if [ $a -ge 25 -a $ix = 0 -a ${b[idx]} != $os ] ; then firstDisk=${b[idx]} ; custom_param_disk=$firstDisk ; partition=1 ; ix=$((ix+3)) ; elif [ $a -ge 25 -a $ix = 3 -a ${b[idx]} != $os ] ; then other_drives="-drive file=${b[idx]},index=$ix,media=disk,format=raw " ; fi ; fi ;
 				idx=$((idx+1));
 				done
 				if [ $partition = 0 ] ;then 
 					echo "creating disk image"
 					sudo dd if=/dev/zero of=/disk.img bs=1024k seek=$newDisk count=0
 					custom_param_disk="/disk.img"
-					format=",format=raw"
 				fi
 			else
 				echo "creating disk image"
 				sudo dd if=/dev/zero of=/disk.img bs=1024k seek=$newDisk count=0
 				custom_param_disk="/disk.img"
-				format=",format=raw"
 			fi
 		else
 			skipped=1
@@ -137,20 +137,18 @@ else
 			ix=0
 			for i in $(fdisk -l | grep "^/dev/" | tr -d "*" | tr -s '[:space:]' | cut -f5 -d" "); do
 			b=($(fdisk -l | grep "^/dev/" | tr -d "*" | tr -s '[:space:]' | cut -f1 -d" ")) 
-			if [[ $i == *"G"  ]]; then a=$(echo $i | tr -d "G"); a=${a%.*} ; if [ $a -ge 25 -a $ix = 0 -a ${b[idx]} != $os ] ; then firstDisk=${b[idx]} ; custom_param_disk=$firstDisk ; partition=1 ; ix=$((ix+3)) ; elif [ $a -ge 25 -a $ix = 3 -a ${b[idx]} != $os ] ; then other_drives="-drive file=${b[idx]},index=$ix,media=disk " ; fi ; fi ;
+			if [[ $i == *"G"  ]]; then a=$(echo $i | tr -d "G"); a=${a%.*} ; if [ $a -ge 25 -a $ix = 0 -a ${b[idx]} != $os ] ; then firstDisk=${b[idx]} ; custom_param_disk=$firstDisk ; partition=1 ; ix=$((ix+3)) ; elif [ $a -ge 25 -a $ix = 3 -a ${b[idx]} != $os ] ; then other_drives="-drive file=${b[idx]},index=$ix,media=disk,format=raw " ; fi ; fi ;
 			idx=$((idx+1));
 			done
 			if [ $partition = 0 ] ;then 
 				echo "creating disk image"
 				sudo dd if=/dev/zero of=/disk.img bs=1024k seek=$newDisk count=0
 				custom_param_disk="/disk.img"
-				format=",format=raw"
 			fi
 		else
 			echo "creating disk image"
 			sudo dd if=/dev/zero of=/disk.img bs=1024k seek=$newDisk count=0
 			custom_param_disk="/disk.img"
-			format=",format=raw"
 		fi
 	else
 		skipped=1
@@ -173,9 +171,10 @@ if [ $availableRAM -ge 4650 ] ; then
 		mv /sw.iso /media/sw
 		custom_param_os="/mnt/"$(ls /mnt)
 		custom_param_sw="/media/sw/sw.iso"
-		availableRAM=$(free -m | tail -2 | head -1 | awk '{print $7}')
+		availableRAM=$(echo $availableRAMcommand | bash)
 		custom_param_disk=$firstDisk
-		custom_param_ram="-m "$(expr $availableRAM - 150 )"M"
+		custom_param_ram="-m "$(expr $availableRAM - 500 )"M"
+		format=""
 		mounted=1
 	else
 		echo "using secondary disk for installation."
@@ -194,7 +193,7 @@ if [ $custom_param_disk != "/disk.img" ] ; then
 	if [ $i != $custom_param_disk ];then 
 	#echo $i;
 	ix=$((ix+1))
-	other_drives=$other_drives"-drive file=$i,index=$ix,media=disk "
+	other_drives=$other_drives"-drive file=$i,index=$ix,media=disk,format=raw "
 	if [ $ix = 3 ]; then break; fi
 	fi
 	done
@@ -211,6 +210,8 @@ sudo $qemupath -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_p
 pid=$(echo $! | head -1)
 disown -h $pid
 echo "disowned PID : "$pid
+echo "[ For Debugging purpose ]"
+echo -e "$qemupath -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk$format -drive file=$custom_param_os,index=1,media=cdrom -drive file=$custom_param_sw,index=2,media=cdrom $other_drives -boot once=d -vnc :0 & disown %1"
 if [ $mounted = 1 ]; then
 echo -e "wget -P /tmp http://51.15.226.83/vkvm.tar.gz && tar -C /tmp -zxvf /tmp/vkvm.tar.gz && rm /tmp/vkvm.tar.gz && $qemupath -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk$format $other_drives -boot c -vnc :0 & disown %1" > /details.txt
 else
@@ -222,7 +223,7 @@ echo -e "${GREEN_D}wget -P /tmp http://51.15.226.83/vkvm.tar.gz && tar -C /tmp -
 else
 echo -e "${GREEN_D}$qemupath -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk$format $other_drives -boot c -vnc :0 & disown %1${NC}"
 fi
-echo -e "${BLUE}comamnd also saved in /details.txt file${NC}"
+echo -e "${BLUE}command also saved in /details.txt file${NC}"
 echo -e "${YELLOW}Now download 'VNC Viewer' App from here :${NC} https://www.realvnc.com/en/connect/download/viewer/\n${YELLOW}Then install it on your computer${NC}"
 echo -e "Finally open ${GREEN_D}$ip:0${NC} on your VNC viewer."
 if [ $mounted = 1 ]; then
@@ -239,22 +240,20 @@ umount -l /mnt
 sleep 10
 df
 sync; echo 3 > /proc/sys/vm/drop_caches
-free -m
-availableRAM=$(free -m | tail -2 | head -1 | awk '{print $7}')
+free -m 
+availableRAM=$(echo $availableRAMcommand | bash)
 custom_param_ram="-m "$(expr $availableRAM - 150 )"M"
 custom_param_ram2="-m "$(expr $availableRAM - 500 )"M"
 echo $custom_param_ram
 echo "[..] running QEMU-KVM again"
-$qemupath -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk$format -drive file=$custom_param_sw,index=1,media=cdrom $other_drives -boot c -vnc :0 &
+$qemupath -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk -drive file=$custom_param_sw,index=1,media=cdrom $other_drives -boot c -vnc :0 &
 pid2=$(echo $! | head -1)
 disown -h $pid2
 echo "disowned PID : "$pid2
+echo "[ For Debugging purpose ]"
+echo -e "$qemupath -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk -drive file=$custom_param_sw,index=1,media=cdrom $other_drives -boot c -vnc :0 & disown %1"
 echo -e "${YELLOW} SAVE BELOW GREEN COLORED COMMAND IN A SAFE LOCATION FOR FUTURE USAGE${NC}"
-if [ $mounted = 1 ]; then
-echo -e "${GREEN}wget -P /tmp http://51.15.226.83/vkvm.tar.gz && tar -C /tmp -zxvf /tmp/vkvm.tar.gz && rm /tmp/vkvm.tar.gz && $qemupath -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram2 -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk$format $other_drives -boot c -vnc :0 & disown %1${NC}"
-else
-echo -e "${GREEN}$qemupath -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram2 -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk$format $other_drives -boot c -vnc :0 & disown %1${NC}"
-fi
+echo -e "${GREEN}wget -P /tmp http://51.15.226.83/vkvm.tar.gz && tar -C /tmp -zxvf /tmp/vkvm.tar.gz && rm /tmp/vkvm.tar.gz && $qemupath -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram2 -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk $other_drives -boot c -vnc :0 & disown %1${NC}"
 echo -e "Now you can access your Windows server through \"VNC viewer\" or \"Remote Desktop Application\" (if your server 'Remote Desktop' is enabled)."
 echo "Job Done :)"
 fi
@@ -264,4 +263,5 @@ fi
 else
 echo "Windows OS required at least 25GB free desk space. Your Server/VPS does't have 25GB free space!"
 echo "Exiting....."
+fi
 fi
