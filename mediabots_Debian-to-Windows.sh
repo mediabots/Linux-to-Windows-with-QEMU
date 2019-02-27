@@ -1,9 +1,5 @@
 #!/bin/bash
 #
-# Deleting Previous Windows Installation by the Script
-umount -l /mnt /media/script
-rm -rf /mediabots /floppy /virtio /media/* /tmp/*
-rm -f /sw.iso /disk.img 
 # installing required Ubuntu packages
 printf "Y\n" | apt install sudo -y
 sudo apt install vim curl genisoimage -y
