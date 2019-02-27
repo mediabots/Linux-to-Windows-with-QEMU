@@ -1,9 +1,5 @@
 #!/bin/bash
 #
-# installing required Ubuntu packages
-printf "Y\n" | apt install sudo -y
-sudo apt install vim curl genisoimage -y
-sudo ln -s /usr/bin/genisoimage /usr/bin/mkisofs
 #Vars
 mounted=0
 GREEN='\033[1;32m'
@@ -17,6 +13,10 @@ virtu=$(egrep '^flags.*(vmx|svm)' /proc/cpuinfo | wc -l)
 if [ $virtu = 0 ] ; then echo -e "[Error] ${RED}Virtualization/KVM in your Server/VPS is OFF\nExiting...${NC}";
 else
 #
+# installing required Ubuntu packages
+printf "Y\n" | apt install sudo -y
+sudo apt install vim curl genisoimage -y
+sudo ln -s /usr/bin/genisoimage /usr/bin/mkisofs
 # Downloading resources
 sudo mkdir /mediabots /floppy /virtio
 #link2_status=$(curl -Is https://archive.org/download/WS2012R2/WS2012R2.ISO | grep HTTP | cut -f2 -d" ")
