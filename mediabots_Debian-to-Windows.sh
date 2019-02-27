@@ -12,6 +12,10 @@ RED='\033[0;31m'
 YELLOW='\033[0;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
+# Virtualization checking..
+virtu=$(egrep '^flags.*(vmx|svm)' /proc/cpuinfo | wc -l)
+if [ $virtu = 0 ] ; then echo -e "[Error] ${RED}Virtualization/KVM in your Server/VPS is OFF\nExiting...${NC}";
+else
 #
 # Downloading resources
 sudo mkdir /mediabots /floppy /virtio
@@ -40,10 +44,6 @@ sync; sudo echo 3 > /proc/sys/vm/drop_caches
 echo "Downloading QEMU"
 sudo apt-get update
 sudo apt-get install -y qemu-kvm
-# Virtualization checking..
-virtu=$(egrep '^flags.*(vmx|svm)' /proc/cpuinfo | wc -l)
-if [ $virtu = 0 ] ; then echo -e "[Error] ${RED}Virtualization/KVM in your Server/VPS is OFF\nExiting...${NC}";
-else
 # Gathering System information
 dist=$(lsb_release -a | head -1 | cut -f2 -d":")
 idx=0
