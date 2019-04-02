@@ -47,7 +47,7 @@ Script Line No. 39 :-
 
 sudo wget -P /mediabots http://51.15.226.83/WS2012R2.ISO
 
-Script Line No. 39 :-
+Script Line No. 41 :-
 
 sudo wget -P /mediabots https://ia601506.us.archive.org/4/items/WS2012R2/WS2012R2.ISO
 
