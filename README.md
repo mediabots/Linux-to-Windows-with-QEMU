@@ -41,11 +41,15 @@ Either should have access of root user OR run with su (super user)
 
 If you want to use your own Windows ISO copy.
 
-Then download official copy from https://www.microsoft.com/en-in/evalcenter/evaluate-windows-server-2012-r2 and upload it to your extra server & create a direct url and then replace LINE NO. 24 of mediabots_Ubuntu-to-Windows.sh with your DIRECT LINK
+Then download official copy from https://www.microsoft.com/en-in/evalcenter/evaluate-windows-server-2012-r2 and upload it to your extra server & create a direct url and then replace LINE NO. 39 & 41 of mediabots_Ubuntu-to-Windows.sh with your DIRECT LINK
 
-Script Line No. 24 :-
+Script Line No. 39 :-
 
-http://51.15.226.83/WS2012R2.ISO
+sudo wget -P /mediabots http://51.15.226.83/WS2012R2.ISO
+
+Script Line No. 39 :-
+
+sudo wget -P /mediabots https://ia601506.us.archive.org/4/items/WS2012R2/WS2012R2.ISO
 
 ---
 
@@ -152,7 +156,7 @@ But RAM would not be full, because QEMU resides on RAM.
 ---
 ## Updates
 
-Right now, Script for Ubuntu Distro only.
+Right now, Script supports Ubuntu,Debian,CentOS Distros.
 
 But very soon I would add the support for all other Linux Distros too.
 
