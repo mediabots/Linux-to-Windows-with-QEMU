@@ -249,7 +249,7 @@ echo -e "${GREEN_D}$qemupath -net nic -net user,hostfwd=tcp::3389-:3389 -show-cu
 fi
 echo -e "${BLUE}command also saved in /details.txt file${NC}"
 echo -e "${YELLOW}Now download 'VNC Viewer' App from here :${NC} https://www.realvnc.com/en/connect/download/viewer/\n${YELLOW}Then install it on your computer${NC}"
-echo -e "Finally open ${GREEN_D}$ip:0${NC} on your VNC viewer."
+echo -e "Finally open ${GREEN_D}$ip:9${NC} on your VNC viewer."
 if [ $mounted = 1 ]; then
 read -r -p "Had your Windows Server setup completed successfully? (yes/no) : " setup_initial
 setup_initial=$(echo "$setup_initial" | head -c 1)
