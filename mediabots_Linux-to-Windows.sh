@@ -19,7 +19,7 @@ if [ $dist = "CentOS" ] ; then
 	sudo yum install wget vim curl genisoimage -y
 	# Downloading Portable QEMU-KVM
 	echo "Downloading QEMU"
-	# sudo yum update -y
+	sudo yum update -y
 	sudo yum install -y qemu-kvm
 	curl https://packages.microsoft.com/config/rhel/7/prod.repo | sudo tee /etc/yum.repos.d/microsoft.repo
 	sudo yum install -y powershell
@@ -51,8 +51,8 @@ else
 	sleep 30
 	exit 1
 fi
-sudo wget -P /floppy https://ftp.mozilla.org/pub/firefox/releases/64.0/win32/en-US/Firefox%20Setup%2064.0.exe
-sudo mv /floppy/'Firefox Setup 64.0.exe' /floppy/Firefox.exe
+sudo wget -P /floppy http://dl.google.com/chrome/install/375.126/chrome_installer.exe
+sudo mv /floppy/'chrome_installer.exe' /floppy/chrome_installer.exe
 sudo wget -P /floppy https://downloadmirror.intel.com/23073/eng/PROWinx64.exe # Intel Network Adapter for Windows Server 2012 R2 
 # Powershell script to auto enable remote desktop for administrator
 sudo touch /floppy/EnableRDP.ps1
@@ -117,9 +117,9 @@ fi
 if [ $diskNumbers -eq 1 ] ; then # opened 1st if
 if [ $availableRAM -ge 4650 ] ; then # opened 2nd if
 	echo -e "${BLUE}For below option pass${NC} yes ${BLUE}iff, your VPS/Server came with${NC} boot system in ${NC}${RED}'RESCUE'${NC} mode ${BLUE}feature${NC}"
-	read -r -p "Do you want to completely delete your current Linux O.S.? (yes/no) : " deleteLinux
-	deleteLinux=$(echo "$deleteLinux" | head -c 1)
-	if [ ! -z $deleteLinux ] && [ $deleteLinux = 'Y' -o $deleteLinux = 'y' ] ; then
+	#read -r -p "Do you want to completely delete your current Linux O.S.? (yes/no) : " deleteLinux
+	#deleteLinux=$(echo "$deleteLinux" | head -c 1)
+	#if [ ! -z $deleteLinux ] && [ $deleteLinux = 'Y' -o $deleteLinux = 'y' ] ; then
 		sudo wget -qO- /tmp https://archive.org/download/vkvm.tar_201903/vkvm.tar.gz | sudo tar xvz -C /tmp
 		qemupath=/tmp/qemu-system-x86_64
 		echo "erasing primary disk data"
@@ -186,9 +186,9 @@ else
 fi # 2nd if closed
 else # 1st if else
 if [ $availableRAM -ge 4650 ] ; then
-	read -r -p "Do you want to completely delete your current Linux O.S.? (yes/no) : " deleteLinux
-	deleteLinux=$(echo "$deleteLinux" | head -c 1)
-	if [ ! -z $deleteLinux ] && [ $deleteLinux = 'Y' -o $deleteLinux = 'y' ] ; then
+	#read -r -p "Do you want to completely delete your current Linux O.S.? (yes/no) : " deleteLinux
+	#deleteLinux=$(echo "$deleteLinux" | head -c 1)
+	#if [ ! -z $deleteLinux ] && [ $deleteLinux = 'Y' -o $deleteLinux = 'y' ] ; then
 		sudo wget -qO- /tmp https://archive.org/download/vkvm.tar_201903/vkvm.tar.gz | sudo tar xvz -C /tmp
 		qemupath=/tmp/qemu-system-x86_64
 		echo "erasing primary disk data"
@@ -255,12 +255,13 @@ echo -e "${GREEN_D}$qemupath -net nic -net user,hostfwd=tcp::30889-:3389 -show-c
 fi
 echo -e "${BLUE}command also saved in /details.txt file${NC}"
 echo -e "${YELLOW}Now download 'VNC Viewer' App from here :${NC} https://www.realvnc.com/en/connect/download/viewer/\n${YELLOW}Then install it on your computer${NC}"
-echo -e "Finally open ${GREEN_D}$ip:9${NC} on your VNC viewer."
+#echo -e "Finally open ${GREEN_D}$ip:9${NC} on your VNC viewer."
+echo -e "Finally open 10.10.20.50:9 on your VNC viewer."
 if [ $mounted = 1 ]; then
-read -r -p "Had your Windows Server setup completed successfully? (yes/no) : " setup_initial
-setup_initial=$(echo "$setup_initial" | head -c 1)
+#read -r -p "Had your Windows Server setup completed successfully? (yes/no) : " setup_initial
+#setup_initial=$(echo "$setup_initial" | head -c 1)
 sleep 10
-if [ ! -z $setup_initial ] && [ $setup_initial = 'Y' -o $setup_initial = 'y' ] ; then
+#if [ ! -z $setup_initial ] && [ $setup_initial = 'Y' -o $setup_initial = 'y' ] ; then
 echo $pid $cpus $custom_param_disk $custom_param_sw $other_drives
 echo "helper called" 
 for i in $(ps aux | grep -i "qemu" | head -2 | tr -s '[:space:]' | cut -f2 -d" ") ; do echo "killing process id : "$i ; kill -9 $i ; done
@@ -272,8 +273,10 @@ df
 sync; echo 3 > /proc/sys/vm/drop_caches
 free -m 
 availableRAM=$(echo $availableRAMcommand | bash)
-custom_param_ram="-m "$(expr $availableRAM - 200 )"M"
-custom_param_ram2="-m "$(expr $availableRAM - 500 )"M"
+#custom_param_ram="-m "$(expr $availableRAM - 200 )"M"
+#custom_param_ram2="-m "$(expr $availableRAM - 500 )"M"
+custom_param_ram="-m "$(expr $availableRAM )"M"
+custom_param_ram2="-m "$(expr $availableRAM )"M"
 echo $custom_param_ram
 echo "[..] running QEMU-KVM again"
 $qemupath -net nic -net user,hostfwd=tcp::30889-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk -drive file=$custom_param_sw,index=1,media=cdrom $other_drives -boot c -vnc :9 &
