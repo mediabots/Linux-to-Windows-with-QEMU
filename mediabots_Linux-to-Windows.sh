@@ -184,7 +184,7 @@ else
 		skipped=1
 	fi
 fi # 2nd if closed
-else # 1st if else
+#else # 1st if else
 if [ $availableRAM -ge 4650 ] ; then
 	#read -r -p "Do you want to completely delete your current Linux O.S.? (yes/no) : " deleteLinux
 	#deleteLinux=$(echo "$deleteLinux" | head -c 1)
