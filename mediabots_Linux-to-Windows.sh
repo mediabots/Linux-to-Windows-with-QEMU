@@ -255,7 +255,7 @@ echo -e "${GREEN_D}$qemupath -net nic -net user,hostfwd=tcp::30889-:3389 -show-c
 fi
 echo -e "${BLUE}command also saved in /details.txt file${NC}"
 echo -e "${YELLOW}Now download 'VNC Viewer' App from here :${NC} https://www.realvnc.com/en/connect/download/viewer/\n${YELLOW}Then install it on your computer${NC}"
-echo -e "Finally open ${GREEN_D}$ip:9${NC} on your VNC viewer."
+echo -e "Finally open 10.10.20.50:9 on your VNC viewer."
 if [ $mounted = 1 ]; then
 read -r -p "Had your Windows Server setup completed successfully? (yes/no) : " setup_initial
 setup_initial=$(echo "$setup_initial" | head -c 1)
@@ -272,8 +272,8 @@ df
 sync; echo 3 > /proc/sys/vm/drop_caches
 free -m 
 availableRAM=$(echo $availableRAMcommand | bash)
-custom_param_ram="-m "$(expr $availableRAM - 200 )"M"
-custom_param_ram2="-m "$(expr $availableRAM - 500 )"M"
+custom_param_ram="-m "$(expr $availableRAM )"M"
+custom_param_ram2="-m "$(expr $availableRAM )"M"
 echo $custom_param_ram
 echo "[..] running QEMU-KVM again"
 $qemupath -net nic -net user,hostfwd=tcp::30889-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk -drive file=$custom_param_sw,index=1,media=cdrom $other_drives -boot c -vnc :9 &
