@@ -272,7 +272,7 @@ df
 sync; echo 3 > /proc/sys/vm/drop_caches
 free -m 
 availableRAM=$(echo $availableRAMcommand | bash)
-custom_param_ram="-m "$(expr $availableRAM - 200 )"M"
+custom_param_ram="-m "$(expr $availableRAM - 1024 )"M"
 custom_param_ram2="-m "$(expr $availableRAM - 500 )"M"
 echo $custom_param_ram
 echo "[..] running QEMU-KVM again"
