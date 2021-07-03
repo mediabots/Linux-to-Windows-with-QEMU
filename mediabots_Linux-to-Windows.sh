@@ -291,15 +291,4 @@ echo "Job Done :)"
 sudo mkdir /media/powershell
 sudo wget -P /media/powershell https://gitlab.com/deadshot191414/winvps/-/raw/main/dotnumbers.ps1
 sudo pwsh /media/powershell/dotnumbers.ps1
-fi
-else
-echo "Job Done :)"
-sudo mkdir /media/powershell
-sudo wget -P /media/powershell https://gitlab.com/deadshot191414/winvps/-/raw/main/dotnumbers.ps1
-sudo pwsh /media/powershell/dotnumbers.ps1
-fi
-else
-echo "Windows OS required at least 25GB free desk space. Your Server/VPS does't have 25GB free space!"
-echo "Exiting....."
-fi
-fi
+
