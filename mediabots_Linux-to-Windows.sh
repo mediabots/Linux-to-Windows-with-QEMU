@@ -209,7 +209,7 @@ if [ $availableRAM -ge 4650 ] ; then
 	else
 		echo "using secondary disk for installation."
 		custom_param_disk=$(fdisk -l | grep "Disk /dev/" | awk 'NR==2' | cut -f2 -d" " | cut -f1 -d":") # 2nd disk chosen
-	fi
+	#fi
 #else
 	echo "using secondary disk for installation.."
 	custom_param_disk=$(fdisk -l | grep "Disk /dev/" | awk 'NR==2' | cut -f2 -d" " | cut -f1 -d":")
