@@ -22,7 +22,7 @@ if [ $dist = "CentOS" ] ; then
 	sudo yum remove xorg* -y
 	sudo yum remove gnome* -y
 	yum remove xrdp -y
-	sudo yum update -y
+	#sudo yum update -y
 	sudo yum install -y qemu-kvm
 	curl https://packages.microsoft.com/config/rhel/7/prod.repo | sudo tee /etc/yum.repos.d/microsoft.repo
 	sudo yum install -y powershell
