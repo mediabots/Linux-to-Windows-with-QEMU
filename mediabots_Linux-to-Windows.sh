@@ -214,7 +214,7 @@ if [ $availableRAM -ge 4650 ] ; then
 	echo "using secondary disk for installation.."
 	custom_param_disk=$(fdisk -l | grep "Disk /dev/" | awk 'NR==2' | cut -f2 -d" " | cut -f1 -d":")
 fi
-fi # closed 1st if
+#fi # closed 1st if
 # Adding other disks only if multi partitions are not exist
 if [ $partition = 0 ] ; then
 ix=2
