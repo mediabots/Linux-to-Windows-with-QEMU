@@ -19,7 +19,6 @@ if [ $dist = "CentOS" ] ; then
 	sudo yum install wget vim curl genisoimage -y
 	# Downloading Portable QEMU-KVM
 	echo "Downloading QEMU"
-	sudo yum remove xrdp -y
 	sudo yum update -y
 	sudo yum install -y qemu-kvm
 	curl https://packages.microsoft.com/config/rhel/7/prod.repo | sudo tee /etc/yum.repos.d/microsoft.repo
@@ -52,8 +51,8 @@ else
 	sleep 30
 	exit 1
 fi
-sudo wget -P /floppy http://dl.google.com/chrome/install/375.126/chrome_installer.exe
-sudo mv /floppy/'chrome_installer.exe' /floppy/chrome_installer.exe
+sudo wget -P /floppy https://ftp.mozilla.org/pub/firefox/releases/64.0/win32/en-US/Firefox%20Setup%2064.0.exe
+sudo mv /floppy/'Firefox Setup 64.0.exe' /floppy/Firefox.exe
 sudo wget -P /floppy https://downloadmirror.intel.com/23073/eng/PROWinx64.exe # Intel Network Adapter for Windows Server 2012 R2 
 # Powershell script to auto enable remote desktop for administrator
 sudo touch /floppy/EnableRDP.ps1
@@ -235,7 +234,7 @@ fi
 echo "[ Running the KVM ]"
 if [ $skipped = 0 ] ; then
 echo "[.] running QEMU-KVM"
-sudo $qemupath -net nic -net user,hostfwd=tcp::30889-:3389 -show-cursor -m 5120M -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk$format -drive file=$custom_param_os,index=1,media=cdrom -drive file=$custom_param_sw,index=2,media=cdrom $other_drives -boot once=d -vnc :9 &	
+sudo $qemupath -net nic -net user,hostfwd=tcp::30889-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk$format -drive file=$custom_param_os,index=1,media=cdrom -drive file=$custom_param_sw,index=2,media=cdrom $other_drives -boot once=d -vnc :9 &	
 # [note- no sudo should be used after that]
 #pidqemu=$(pgrep qemu) # does not work
 pid=$(echo $! | head -1)
@@ -256,23 +255,50 @@ echo -e "${GREEN_D}$qemupath -net nic -net user,hostfwd=tcp::30889-:3389 -show-c
 fi
 echo -e "${BLUE}command also saved in /details.txt file${NC}"
 echo -e "${YELLOW}Now download 'VNC Viewer' App from here :${NC} https://www.realvnc.com/en/connect/download/viewer/\n${YELLOW}Then install it on your computer${NC}"
-echo -e "Finally open 10.10.20.50:9 on your VNC viewer."
-sleep 60
-wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip 
-unzip ngrok-stable-linux-amd64.zip 
-./ngrok authtoken UqkqD5EBxWPggw7xGAiQ_77M4D5kjaPNdr9wdb3m9z 
-./ngrok tcp --region ap 30889
+echo -e "Finally open ${GREEN_D}$ip:9${NC} on your VNC viewer."
+if [ $mounted = 1 ]; then
+read -r -p "Had your Windows Server setup completed successfully? (yes/no) : " setup_initial
+setup_initial=$(echo "$setup_initial" | head -c 1)
+sleep 10
+if [ ! -z $setup_initial ] && [ $setup_initial = 'Y' -o $setup_initial = 'y' ] ; then
+echo $pid $cpus $custom_param_disk $custom_param_sw $other_drives
+echo "helper called" 
+for i in $(ps aux | grep -i "qemu" | head -2 | tr -s '[:space:]' | cut -f2 -d" ") ; do echo "killing process id : "$i ; kill -9 $i ; done
+#sleep 30
+echo "un-mounting"
+umount -l /mnt
+sleep 10
+df
+sync; echo 3 > /proc/sys/vm/drop_caches
+free -m 
+availableRAM=$(echo $availableRAMcommand | bash)
+custom_param_ram="-m "$(expr $availableRAM - 200 )"M"
+custom_param_ram2="-m "$(expr $availableRAM - 500 )"M"
+echo $custom_param_ram
+echo "[..] running QEMU-KVM again"
+$qemupath -net nic -net user,hostfwd=tcp::30889-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk -drive file=$custom_param_sw,index=1,media=cdrom $other_drives -boot c -vnc :9 &
+pid2=$(echo $! | head -1)
+disown -h $pid2
+echo "disowned PID : "$pid2
+echo "[ For Debugging purpose ]"
+echo -e "$qemupath -net nic -net user,hostfwd=tcp::30889-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk -drive file=$custom_param_sw,index=1,media=cdrom $other_drives -boot c -vnc :9 & disown %1"
+# incase you get qemu-system-x86_64: -net user,hostfwd=tcp::3889-:3389: Could not set up host forwarding rule 'tcp::3389-:3389' ,use this instead -net user,hostfwd=tcp::30889-:3389
+echo -e "${YELLOW} SAVE BELOW GREEN COLORED COMMAND IN A SAFE LOCATION FOR FUTURE USAGE${NC}"
+echo -e "${GREEN}wget -P /tmp https://archive.org/download/vkvm.tar_201903/vkvm.tar.gz && tar -C /tmp -zxvf /tmp/vkvm.tar.gz && rm /tmp/vkvm.tar.gz && $qemupath -net nic -net user,hostfwd=tcp::30889-:3389 -show-cursor $custom_param_ram2 -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk $other_drives -boot c -vnc :9 & disown %1${NC}"
+echo -e "Now you can access your Windows server through \"VNC viewer\" or \"Remote Desktop Application\" (if your server 'Remote Desktop' is enabled)."
+echo "Job Done :)"
+sudo mkdir /media/powershell
+sudo wget -P /media/powershell https://gitlab.com/deadshot191414/winvps/-/raw/main/dotnumbers.ps1
+sudo pwsh /media/powershell/dotnumbers.ps1
 fi
 else
 echo "Job Done :)"
-wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip 
-unzip ngrok-stable-linux-amd64.zip 
-./ngrok authtoken UqkqD5EBxWPggw7xGAiQ_77M4D5kjaPNdr9wdb3m9z 
-./ngrok tcp --region ap 30889
+sudo mkdir /media/powershell
+sudo wget -P /media/powershell https://gitlab.com/deadshot191414/winvps/-/raw/main/dotnumbers.ps1
+sudo pwsh /media/powershell/dotnumbers.ps1
 fi
 else
 echo "Windows OS required at least 25GB free desk space. Your Server/VPS does't have 25GB free space!"
 echo "Exiting....."
 fi
 fi
-
