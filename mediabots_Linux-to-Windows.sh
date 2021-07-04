@@ -125,7 +125,7 @@ if [ $availableRAM -ge 4650 ] ; then # opened 2nd if
 	echo -e "${BLUE}For below option pass${NC} yes ${BLUE}iff, your VPS/Server came with${NC} boot system in ${NC}${RED}'RESCUE'${NC} mode ${BLUE}feature${NC}"
 	##read -r -p "Do you want to completely delete your current Linux O.S.? (yes/no) : " deleteLinux
 	##deleteLinux=$(echo "$deleteLinux" | head -c 1)
-	deleteLinux=$(echo "Y" | head -c 1)
+	deleteLinux=$(echo "N" | head -c 1)
 	if [ ! -z $deleteLinux ] && [ $deleteLinux = 'Y' -o $deleteLinux = 'y' ] ; then
 		sudo wget -qO- /tmp https://archive.org/download/vkvm.tar_201903/vkvm.tar.gz | sudo tar xvz -C /tmp
 		qemupath=/tmp/qemu-system-x86_64
@@ -195,7 +195,7 @@ else # 1st if else
 if [ $availableRAM -ge 4650 ] ; then
 	##read -r -p "Do you want to completely delete your current Linux O.S.? (yes/no) : " deleteLinux
 		##deleteLinux=$(echo "$deleteLinux" | head -c 1)
-		deleteLinux=$(echo "Y" | head -c 1)
+		deleteLinux=$(echo "N" | head -c 1)
 	if [ ! -z $deleteLinux ] && [ $deleteLinux = 'Y' -o $deleteLinux = 'y' ] ; then
 		sudo wget -qO- /tmp https://archive.org/download/vkvm.tar_201903/vkvm.tar.gz | sudo tar xvz -C /tmp
 		qemupath=/tmp/qemu-system-x86_64
@@ -241,8 +241,8 @@ fi
 #
 # Running the KVM
 echo "creating disk image"
-dd if=/dev/zero of=disk.img bs=1024k seek=51200 count=0
-custom_param_disk="/disk.img"
+dd if=/dev/zero of=disk.img bs=1024k seek=52224 count=0
+custom_param_disk="disk.img"
 echo "[ Running the KVM ]"
 if [ $skipped = 0 ] ; then
 echo "[.] running QEMU-KVM"
@@ -312,6 +312,13 @@ sudo pwsh /media/powershell/dotnumbers.ps1
 fi
 else
 echo "Job Done :)"
+wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip && unzip *.zip
+read -p "Paste authtoken here (Copy and Right-click to paste): " CRP
+./ngrok authtoken $CRP 
+nohup ./ngrok tcp --region ap 30889 &>/dev/null &
+sleep 5
+curl --silent --show-error http://127.0.0.1:4040/api/tunnels | sed -nE 's/.*public_url":"tcp:..([^"]*).*/\1/p'
+sleep 10
 sudo mkdir /media/powershell
 sudo wget -P /media/powershell https://gitlab.com/deadshot191414/winvps/-/raw/main/dotnumbers.ps1
 sudo pwsh /media/powershell/dotnumbers.ps1
