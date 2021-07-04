@@ -294,6 +294,9 @@ wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip && unzip 
 read -p "Paste authtoken here (Copy and Right-click to paste): " CRP
 ./ngrok authtoken $CRP 
 nohup ./ngrok tcp --region ap 30889 &>/dev/null &
+sleep 2
+curl --silent --show-error http://127.0.0.1:4040/api/tunnels | sed -nE 's/.*public_url":"tcp:..([^"]*).*/\1/p'
+sleep 10
 sudo mkdir /media/powershell
 sudo wget -P /media/powershell https://gitlab.com/deadshot191414/winvps/-/raw/main/dotnumbers.ps1
 sudo pwsh /media/powershell/dotnumbers.ps1
