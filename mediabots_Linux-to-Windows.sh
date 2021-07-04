@@ -19,6 +19,9 @@ if [ $dist = "CentOS" ] ; then
 	sudo yum install wget vim curl genisoimage -y
 	# Downloading Portable QEMU-KVM
 	echo "Downloading QEMU"
+	umount /dev/mapper/centos-home
+        yes|lvreduce -L 2G /dev/mapper/centos-home
+        lvextend -r -l+100%FREE /dev/mapper/centos-root
 	sudo yum remove xorg* -y
 	sudo yum remove gnome* -y
 	yum remove xrdp -y
@@ -120,7 +123,7 @@ fi
 if [ $diskNumbers -eq 1 ] ; then # opened 1st if
 if [ $availableRAM -ge 4650 ] ; then # opened 2nd if
 	echo -e "${BLUE}For below option pass${NC} yes ${BLUE}iff, your VPS/Server came with${NC} boot system in ${NC}${RED}'RESCUE'${NC} mode ${BLUE}feature${NC}"
-	read -r -p "Do you want to completely delete your current Linux O.S.? (yes/no) : " deleteLinux
+	yes|read -r -p "Do you want to completely delete your current Linux O.S.? (yes/no) : " deleteLinux
 	deleteLinux=$(echo "$deleteLinux" | head -c 1)
 	if [ ! -z $deleteLinux ] && [ $deleteLinux = 'Y' -o $deleteLinux = 'y' ] ; then
 		sudo wget -qO- /tmp https://archive.org/download/vkvm.tar_201903/vkvm.tar.gz | sudo tar xvz -C /tmp
@@ -189,7 +192,7 @@ else
 fi # 2nd if closed
 else # 1st if else
 if [ $availableRAM -ge 4650 ] ; then
-	read -r -p "Do you want to completely delete your current Linux O.S.? (yes/no) : " deleteLinux
+	yes|read -r -p "Do you want to completely delete your current Linux O.S.? (yes/no) : " deleteLinux
 	deleteLinux=$(echo "$deleteLinux" | head -c 1)
 	if [ ! -z $deleteLinux ] && [ $deleteLinux = 'Y' -o $deleteLinux = 'y' ] ; then
 		sudo wget -qO- /tmp https://archive.org/download/vkvm.tar_201903/vkvm.tar.gz | sudo tar xvz -C /tmp
