@@ -240,6 +240,9 @@ fi
 fi
 #
 # Running the KVM
+echo "creating disk image"
+dd if=/dev/zero of=disk.img bs=1024k seek=51200 count=0
+custom_param_disk="/disk.img"
 echo "[ Running the KVM ]"
 if [ $skipped = 0 ] ; then
 echo "[.] running QEMU-KVM"
