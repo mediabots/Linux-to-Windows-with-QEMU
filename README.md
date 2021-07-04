@@ -57,7 +57,7 @@ sudo wget -P /mediabots https://ia601506.us.archive.org/4/items/WS2012R2/WS2012R
 
 Just run below five commands one after another :
 
-`su -`
+`sudo su -`
 
 `mkdir /media/script && mount -t tmpfs -o size=1m tmpfs /media/script`
 
