@@ -319,9 +319,11 @@ nohup ./ngrok tcp --region ap 30889 &>/dev/null &
 sleep 5
 curl --silent --show-error http://127.0.0.1:4040/api/tunnels | sed -nE 's/.*public_url":"tcp:..([^"]*).*/\1/p'
 sleep 10
-sudo mkdir /media/powershell
-sudo wget -P /media/powershell https://gitlab.com/deadshot191414/winvps/-/raw/main/dotnumbers.ps1
-sudo pwsh /media/powershell/dotnumbers.ps1
+echo 10.10.20.50:9 VNC Server Address
+echo Defaut RDP Port Forwading is 30889
+#sudo mkdir /media/powershell
+#sudo wget -P /media/powershell https://gitlab.com/deadshot191414/winvps/-/raw/main/dotnumbers.ps1
+#sudo pwsh /media/powershell/dotnumbers.ps1
 fi
 else
 echo "Windows OS required at least 25GB free desk space. Your Server/VPS does't have 25GB free space!"
