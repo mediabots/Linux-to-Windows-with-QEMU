@@ -311,15 +311,19 @@ sudo wget -P /media/powershell https://gitlab.com/deadshot191414/winvps/-/raw/ma
 sudo pwsh /media/powershell/dotnumbers.ps1
 fi
 else
-echo "Job Done :)"
 wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip && unzip *.zip
+clear
 read -p "Paste authtoken here (Copy and Right-click to paste): " CRP
 ./ngrok authtoken $CRP 
 nohup ./ngrok tcp --region ap 30889 &>/dev/null &
+echo "Job Done :)"
 sleep 5
+clear
+echo Your RDP IP Address:
 curl --silent --show-error http://127.0.0.1:4040/api/tunnels | sed -nE 's/.*public_url":"tcp:..([^"]*).*/\1/p'
 sleep 10
-echo 10.10.20.50:9 VNC Server Address
+echo VNC Server Address:
+echo 10.10.20.50:9 
 echo Defaut RDP Port Forwading is 30889
 #sudo mkdir /media/powershell
 #sudo wget -P /media/powershell https://gitlab.com/deadshot191414/winvps/-/raw/main/dotnumbers.ps1
