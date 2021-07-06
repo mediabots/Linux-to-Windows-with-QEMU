@@ -44,11 +44,11 @@ fi
 sudo ln -s /usr/bin/genisoimage /usr/bin/mkisofs
 # Downloading resources
 sudo mkdir /mediabots /floppy /virtio
-link1_status=$(curl -Is https://ia801400.us.archive.org/13/items/21996.1.210529-1541.co-release-client-consumer-x-64-fre-en-us_20210616/21996.1.210529-1541.co_release_CLIENT_CONSUMER_x64FRE_en-us.iso | grep HTTP | cut -f2 -d" " | head -1)
+link1_status=$(curl -Is https://app.vagrantup.com/thuonghai2711/boxes/WindowsISO/versions/1.0.0/providers/qemu.box | grep HTTP | cut -f2 -d" " | head -1)
 link2_status=$(curl -Is https://software-download.microsoft.com/download/sg/20348.1.210507-1500.fe_release_SERVER_EVAL_x64FRE_en-us.iso | grep HTTP | cut -f2 -d" ")
 #sudo wget -P /mediabots https://archive.org/download/WS2012R2/WS2012R2.ISO # Windows Server 2012 R2 
-if [ $link1_status = "200" ] ; then 
-	sudo wget -O /mediabots/WS11DEV.ISO https://ia801400.us.archive.org/13/items/21996.1.210529-1541.co-release-client-consumer-x-64-fre-en-us_20210616/21996.1.210529-1541.co_release_CLIENT_CONSUMER_x64FRE_en-us.iso
+if [ $link1_status = "302" ] ; then 
+	sudo wget -O /mediabots/WS11DEV.ISO https://app.vagrantup.com/thuonghai2711/boxes/WindowsISO/versions/1.0.0/providers/qemu.box
 elif [ $link2_status = "200" -o $link2_status = "301" -o $link2_status = "302" ] ; then 
 	sudo wget -O /mediabots/WS2022.ISO https://software-download.microsoft.com/download/sg/20348.1.210507-1500.fe_release_SERVER_EVAL_x64FRE_en-us.iso
 else
