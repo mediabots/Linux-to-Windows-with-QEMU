@@ -243,7 +243,7 @@ fi
 # Running the KVM
 echo "creating disk image"
 ##dd if=/dev/zero of=disk.img bs=1024k seek=52224 count=0
-qemu-img resize disk.img 56GB
+qemu-img resize w2022.img 56GB
 custom_param_disk="w2022.img"
 echo "[ Running the KVM ]"
 if [ $skipped = 0 ] ; then
