@@ -243,7 +243,7 @@ fi
 # Running the KVM
 echo "creating disk image"
 ##dd if=/dev/zero of=disk.img bs=1024k seek=52224 count=0
-qemu-img resize w2022.img 56GB
+qemu-img resize w2022.img 52GB
 custom_param_disk="w2022.img"
 echo "[ Running the KVM ]"
 if [ $skipped = 0 ] ; then
@@ -286,7 +286,7 @@ df
 sync; echo 3 > /proc/sys/vm/drop_caches
 free -m 
 availableRAM=$(echo $availableRAMcommand | bash)
-custom_param_ram="-m "$(expr $availableRAM - 2048 )"M"
+custom_param_ram="-m "$(expr $availableRAM - 1048 )"M"
 custom_param_ram2="-m "$(expr $availableRAM - 500 )"M"
 echo $custom_param_ram
 echo "[..] running QEMU-KVM again"
@@ -325,7 +325,7 @@ echo Your RDP IP Address:
 curl --silent --show-error http://127.0.0.1:4040/api/tunnels | sed -nE 's/.*public_url":"tcp:..([^"]*).*/\1/p'
 echo User: Administrator
 echo Password: Thuonghai001
-echo This is windows Pre-install, connect using RDP  
+echo This is windows server 2022 Pre-install, connect using RDP  
 sleep 10
 echo VNC Server Address:
 echo 10.10.20.50:9 
