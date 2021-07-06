@@ -315,7 +315,7 @@ wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip && unzip 
 clear
 read -p "Paste authtoken here (Copy and Right-click to paste): " CRP
 ./ngrok authtoken $CRP 
-nohup ./ngrok tcp --region ap 30889 &>/dev/null &
+nohup ./ngrok tcp 30889 &>/dev/null &
 echo "Job Done :)"
 sleep 5
 clear
