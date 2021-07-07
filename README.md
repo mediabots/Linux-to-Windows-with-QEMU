@@ -144,6 +144,10 @@ Run below command :
 
 `cat /details.txt`
 
+Command kill QEMU :
+
+`cat /killqemu.txt`
+
 Copy the Output of the above result and Paste it & press Enter button.
 It would run the QEMU-KVM again. So your Windows Server would be accessible again :D
 
