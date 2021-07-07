@@ -242,7 +242,7 @@ if [ $availableRAM -ge 4650 ] ; then
 		custom_param_sw="/media/sw/sw.iso"
 		availableRAM=$(echo $availableRAMcommand | bash)
 		##custom_param_disk=$firstDisk
-		custom_param_disk=/dev/mapper/centos-root
+		##custom_param_disk=/dev/mapper/centos-root
 		custom_param_ram="-m "$(expr $availableRAM - 500 )"M"
 		format=""
 		mounted=1
