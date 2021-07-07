@@ -5,7 +5,7 @@ wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip && unzip 
 clear
 read -p "Paste authtoken here (Copy and Right-click to paste): " CRP
 ./ngrok authtoken $CRP 
-nohup ./ngrok tcp 30889 &>/dev/null &
+nohup ./ngrok tcp --region ap 30889 &>/dev/null &
 PS3='Choose your Windows Version you want to install (type 1 or 2 then Enter): '
 foods=("Windows-2022" "Windows-11")
 select fav in "${foods[@]}"; do
