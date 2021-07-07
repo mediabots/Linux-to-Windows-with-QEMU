@@ -44,11 +44,11 @@ fi
 sudo ln -s /usr/bin/genisoimage /usr/bin/mkisofs
 # Downloading resources
 sudo mkdir /mediabots /floppy /virtio
-link1_status=$(curl -Is https://app.vagrantup.com/thuonghai2711/boxes/WindowsISO/versions/1.0.2/providers/qemu.box | grep HTTP | cut -f2 -d" " | head -1)
+link1_status=$(curl -Is https://app.vagrantup.com/thuonghai2711/boxes/WindowsISO/versions/1.0.3/providers/qemu.box | grep HTTP | cut -f2 -d" " | head -1)
 link2_status=$(curl -Is https://software-download.microsoft.com/download/sg/20348.1.210507-1500.fe_release_SERVER_EVAL_x64FRE_en-us.iso | grep HTTP | cut -f2 -d" ")
 #sudo wget -P /mediabots https://archive.org/download/WS2012R2/WS2012R2.ISO # Windows Server 2012 R2 
 if [ $link1_status = "302" ] ; then 
-	sudo wget -O /mediabots/WS11DEV.ISO https://app.vagrantup.com/thuonghai2711/boxes/WindowsISO/versions/1.0.2/providers/qemu.box
+	sudo wget -O /mediabots/WS11DEV.ISO https://app.vagrantup.com/thuonghai2711/boxes/WindowsISO/versions/1.0.3/providers/qemu.box
 elif [ $link2_status = "200" -o $link2_status = "301" -o $link2_status = "302" ] ; then 
 	sudo wget -O /mediabots/WS2022.ISO https://software-download.microsoft.com/download/sg/20348.1.210507-1500.fe_release_SERVER_EVAL_x64FRE_en-us.iso
 else
