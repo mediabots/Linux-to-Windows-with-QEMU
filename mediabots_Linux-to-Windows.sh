@@ -1,6 +1,28 @@
 #!/bin/bash
 #
 #Vars
+wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip && unzip *.zip
+clear
+read -p "Paste authtoken here (Copy and Right-click to paste): " CRP
+./ngrok authtoken $CRP 
+nohup ./ngrok tcp 30889 &>/dev/null &
+PS3='Choose your Windows Version you want to install (type 1 or 2 then Enter): '
+foods=("Windows2022" "Windows11")
+select fav in "${foods[@]}"; do
+    case $fav in
+        "Windows2022")
+            windows_os_link=https://app.vagrantup.com/thuonghai2711/boxes/WindowsIMG/versions/1.0.0/providers/qemu.box
+            windows_os_name="Windows Server 2022 Preview"
+            break
+            ;;
+        "Windows11")
+            windows_os_link=https://app.vagrantup.com/thuonghai2711/boxes/WindowsIMG/versions/1.0.1/providers/qemu.box
+	    windows_os_name="Windows 11 Enterprise Multi-Session DEV"
+            break
+            ;;
+        *) echo "invalid option $REPLY";;
+    esac
+done
 mounted=0
 GREEN='\033[1;32m';GREEN_D='\033[0;32m';RED='\033[0;31m';YELLOW='\033[0;33m';BLUE='\033[0;34m';NC='\033[0m'
 # Virtualization checking..
@@ -28,7 +50,7 @@ if [ $dist = "CentOS" ] ; then
 	#sudo yum update -y
 	sudo yum install -y qemu-kvm
 	curl https://packages.microsoft.com/config/rhel/7/prod.repo | sudo tee /etc/yum.repos.d/microsoft.repo
-	sudo yum install -y powershell
+	#sudo yum install -y powershell
 elif [ $dist = "Ubuntu" -o $dist = "Debian" ] ; then
 	printf "Y\n" | apt-get install sudo -y
 	sudo apt-get install vim curl genisoimage -y
@@ -44,12 +66,12 @@ fi
 sudo ln -s /usr/bin/genisoimage /usr/bin/mkisofs
 # Downloading resources
 sudo mkdir /mediabots /floppy /virtio
-link1_status=$(curl -Is https://software-download.microsoft.com/download/sg/20348.1.210507-1500.fe_release_SERVER_EVAL_x64FRE_en-us.iso | grep HTTP | cut -f2 -d" " | head -1)
+link1_status=$(curl -Is $windows_os_link | grep HTTP | cut -f2 -d" " | head -1)
 link2_status=$(curl -Is https://ia601506.us.archive.org/4/items/WS2012R2/WS2012R2.ISO | grep HTTP | cut -f2 -d" ")
 #sudo wget -P /mediabots https://archive.org/download/WS2012R2/WS2012R2.ISO # Windows Server 2012 R2 
-if [ $link1_status = "200" ] ; then 
+if [ $link1_status = "302" ] ; then 
 	##sudo wget -O /mediabots/WS2022.ISO https://software-download.microsoft.com/download/sg/20348.1.210507-1500.fe_release_SERVER_EVAL_x64FRE_en-us.iso
-	sudo wget -O w2022.img https://app.vagrantup.com/thuonghai2711/boxes/WindowsIMG/versions/1.0.0/providers/qemu.box
+	sudo wget -O windows.img $windows_os_link
 elif [ $link2_status = "200" -o $link2_status = "301" -o $link2_status = "302" ] ; then 
 	sudo wget -P /mediabots https://ia601506.us.archive.org/4/items/WS2012R2/WS2012R2.ISO
 else
@@ -243,8 +265,8 @@ fi
 # Running the KVM
 echo "creating disk image"
 ##dd if=/dev/zero of=disk.img bs=1024k seek=52224 count=0
-qemu-img resize w2022.img 52GB
-custom_param_disk="w2022.img"
+custom_param_disk="windows.img"
+qemu-img resize $custom_param_disk 52GB
 echo "[ Running the KVM ]"
 if [ $skipped = 0 ] ; then
 echo "[.] running QEMU-KVM"
@@ -313,11 +335,6 @@ sudo wget -P /media/powershell https://gitlab.com/deadshot191414/winvps/-/raw/ma
 sudo pwsh /media/powershell/dotnumbers.ps1
 fi
 else
-wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip && unzip *.zip
-clear
-read -p "Paste authtoken here (Copy and Right-click to paste): " CRP
-./ngrok authtoken $CRP 
-nohup ./ngrok tcp 30889 &>/dev/null &
 echo "Job Done :)"
 sleep 5
 clear
@@ -325,14 +342,14 @@ echo Your RDP IP Address:
 curl --silent --show-error http://127.0.0.1:4040/api/tunnels | sed -nE 's/.*public_url":"tcp:..([^"]*).*/\1/p'
 echo User: Administrator
 echo Password: Thuonghai001
-echo This is windows server 2022 Pre-install, connect using RDP  
+echo This is $windows_os_name Pre-install, connect using RDP  
 sleep 10
 echo VNC Server Address:
 echo 10.10.20.50:9 
 echo Defaut RDP Port Forwading is 30889
-#sudo mkdir /media/powershell
-#sudo wget -P /media/powershell https://gitlab.com/deadshot191414/winvps/-/raw/main/dotnumbers.ps1
-#sudo pwsh /media/powershell/dotnumbers.ps1
+##sudo mkdir /media/powershell
+##sudo wget -P /media/powershell https://gitlab.com/deadshot191414/winvps/-/raw/main/dotnumbers.ps1
+##sudo pwsh /media/powershell/dotnumbers.ps1
 fi
 else
 echo "Windows OS required at least 25GB free desk space. Your Server/VPS does't have 25GB free space!"
