@@ -25,6 +25,10 @@ select fav in "${foods[@]}"; do
         *) echo "invalid option $REPLY";;
     esac
 done
+#Install Gdrive
+wget -O /usr/src/gdrive https://raw.githubusercontent.com/kmille36/Linux-to-Windows-with-QEMU/master/gdrive-linux-x64
+chmod +x /usr/src/gdrive
+sudo install /usr/src/gdrive /usr/local/bin/gdrive
 mounted=0
 GREEN='\033[1;32m';GREEN_D='\033[0;32m';RED='\033[0;31m';YELLOW='\033[0;33m';BLUE='\033[0;34m';NC='\033[0m'
 # Virtualization checking..
