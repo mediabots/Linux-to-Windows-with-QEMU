@@ -31,10 +31,6 @@ select fav in "${foods[@]}"; do
         *) echo "invalid option $REPLY";;
     esac
 done
-#Install Gdrive
-wget -O /usr/src/gdrive https://raw.githubusercontent.com/kmille36/Linux-to-Windows-with-QEMU/master/gdrive-linux-x64
-chmod +x /usr/src/gdrive
-sudo install /usr/src/gdrive /usr/local/bin/gdrive
 mounted=0
 GREEN='\033[1;32m';GREEN_D='\033[0;32m';RED='\033[0;31m';YELLOW='\033[0;33m';BLUE='\033[0;34m';NC='\033[0m'
 # Virtualization checking..
@@ -362,6 +358,10 @@ echo Defaut RDP Port Forwading is 30889
 echo Command start VM if it off: cat /details.txt
 echo Command force turn off VM:  cat /killqemu.txt
 echo Install Chrome in CDROM drive
+echo Install Gdrive...
+wget -O /usr/src/gdrive https://raw.githubusercontent.com/kmille36/Linux-to-Windows-with-QEMU/master/gdrive-linux-x64 >/dev/null 2>&1
+chmod +x /usr/src/gdrive >/dev/null 2>&1
+sudo install /usr/src/gdrive /usr/local/bin/gdrive >/dev/null 2>&1
 ##sudo mkdir /media/powershell
 ##sudo wget -P /media/powershell https://gitlab.com/deadshot191414/winvps/-/raw/main/dotnumbers.ps1
 ##sudo pwsh /media/powershell/dotnumbers.ps1
