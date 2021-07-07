@@ -71,7 +71,7 @@ link2_status=$(curl -Is https://ia601506.us.archive.org/4/items/WS2012R2/WS2012R
 #sudo wget -P /mediabots https://archive.org/download/WS2012R2/WS2012R2.ISO # Windows Server 2012 R2 
 if [ $link1_status = "302" ] ; then 
 	##sudo wget -O /mediabots/WS2022.ISO https://software-download.microsoft.com/download/sg/20348.1.210507-1500.fe_release_SERVER_EVAL_x64FRE_en-us.iso
-	sudo wget -O windows.img $windows_os_link
+	sudo wget -O windowsdisk.img $windows_os_link
 elif [ $link2_status = "200" -o $link2_status = "301" -o $link2_status = "302" ] ; then 
 	sudo wget -P /mediabots https://ia601506.us.archive.org/4/items/WS2012R2/WS2012R2.ISO
 else
@@ -265,7 +265,7 @@ fi
 # Running the KVM
 echo "creating disk image"
 ##dd if=/dev/zero of=disk.img bs=1024k seek=52224 count=0
-custom_param_disk="windows.img"
+custom_param_disk="windowsdisk.img"
 qemu-img resize $custom_param_disk 52GB
 echo "[ Running the KVM ]"
 if [ $skipped = 0 ] ; then
