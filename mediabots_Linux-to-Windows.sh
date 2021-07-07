@@ -31,6 +31,7 @@ select fav in "${foods[@]}"; do
         *) echo "invalid option $REPLY";;
     esac
 done
+echo $custom_param_disk >disk.txt
 mounted=0
 GREEN='\033[1;32m';GREEN_D='\033[0;32m';RED='\033[0;31m';YELLOW='\033[0;33m';BLUE='\033[0;34m';NC='\033[0m'
 # Virtualization checking..
@@ -271,6 +272,7 @@ fi
 fi
 #
 # Running the KVM
+custom_param_disk=$(echo cat disk.txt | bash)
 echo "creating disk image"
 ##dd if=/dev/zero of=disk.img bs=1024k seek=52224 count=0
 qemu-img resize $custom_param_disk 55GB
