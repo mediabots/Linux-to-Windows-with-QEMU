@@ -350,6 +350,7 @@ echo 10.10.20.50:9
 echo Defaut RDP Port Forwading is 30889
 echo Command start VM if it off: cat /details.txt
 echo Command force turn off VM:  cat /killqemu.txt
+echo Install Chrome in CDROM drive
 ##sudo mkdir /media/powershell
 ##sudo wget -P /media/powershell https://gitlab.com/deadshot191414/winvps/-/raw/main/dotnumbers.ps1
 ##sudo pwsh /media/powershell/dotnumbers.ps1
