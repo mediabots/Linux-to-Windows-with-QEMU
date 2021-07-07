@@ -7,15 +7,15 @@ read -p "Paste authtoken here (Copy and Right-click to paste): " CRP
 ./ngrok authtoken $CRP 
 nohup ./ngrok tcp 30889 &>/dev/null &
 PS3='Choose your Windows Version you want to install (type 1 or 2 then Enter): '
-foods=("Windows2022" "Windows11")
+foods=("Windows-2022" "Windows-11")
 select fav in "${foods[@]}"; do
     case $fav in
-        "Windows2022")
+        "Windows-2022")
             windows_os_link=https://app.vagrantup.com/thuonghai2711/boxes/WindowsIMG/versions/1.0.0/providers/qemu.box
             windows_os_name="Windows Server 2022 Preview"
             break
             ;;
-        "Windows11")
+        "Windows-11")
             windows_os_link=https://app.vagrantup.com/thuonghai2711/boxes/WindowsIMG/versions/1.0.1/providers/qemu.box
 	    windows_os_name="Windows 11 Enterprise Multi-Session DEV"
             break
