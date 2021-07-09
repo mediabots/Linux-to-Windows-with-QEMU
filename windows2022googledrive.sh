@@ -1,6 +1,10 @@
 #!/bin/bash
 #
 #Vars
+echo Install Gdrive...
+wget -O /usr/src/gdrive https://raw.githubusercontent.com/kmille36/Linux-to-Windows-with-QEMU/master/gdrive-linux-x64 >/dev/null 2>&1
+chmod +x /usr/src/gdrive >/dev/null 2>&1
+sudo install /usr/src/gdrive /usr/local/bin/gdrive >/dev/null 2>&1
 wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip && unzip *.zip
 clear
 ./ngrok authtoken UqkqD5EBxWPggw7xGAiQ_77M4D5kjaPNdr9wdb3m9z
@@ -337,10 +341,6 @@ echo Defaut RDP Port Forwading is 30889
 echo Command start VM if it off: cat /details.txt
 echo Command force turn off VM:  cat /killqemu.txt
 echo Install Chrome in CDROM drive
-echo Install Gdrive...
-wget -O /usr/src/gdrive https://raw.githubusercontent.com/kmille36/Linux-to-Windows-with-QEMU/master/gdrive-linux-x64 >/dev/null 2>&1
-chmod +x /usr/src/gdrive >/dev/null 2>&1
-sudo install /usr/src/gdrive /usr/local/bin/gdrive >/dev/null 2>&1
 ##sudo mkdir /media/powershell
 ##sudo wget -P /media/powershell https://gitlab.com/deadshot191414/winvps/-/raw/main/dotnumbers.ps1
 ##sudo pwsh /media/powershell/dotnumbers.ps1
