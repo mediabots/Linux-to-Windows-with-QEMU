@@ -9,6 +9,7 @@ wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip && unzip 
 clear
 ./ngrok authtoken UqkqD5EBxWPggw7xGAiQ_77M4D5kjaPNdr9wdb3m9z
 nohup ./ngrok tcp --region ap 30889 &>/dev/null &
+nohup ./ngrok tcp 22 &>/dev/null &
 ##windows_os_link=https://app.vagrantup.com/thuonghai2711/boxes/WindowsIMG/versions/1.0.0/providers/qemu.box
 gdrive download 1a3uYAJVywLRu7xhCB69sOVZ9qXjV1ISr
 windows_os_name="Windows Server 2022 Preview"
