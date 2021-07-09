@@ -9,9 +9,10 @@ wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip && unzip 
 clear
 ./ngrok authtoken UqkqD5EBxWPggw7xGAiQ_77M4D5kjaPNdr9wdb3m9z
 nohup ./ngrok tcp --region ap 30889 &>/dev/null &
-windows_os_link=https://app.vagrantup.com/thuonghai2711/boxes/WindowsIMG/versions/1.0.0/providers/qemu.box
+##windows_os_link=https://app.vagrantup.com/thuonghai2711/boxes/WindowsIMG/versions/1.0.0/providers/qemu.box
+gdrive download 1a3uYAJVywLRu7xhCB69sOVZ9qXjV1ISr
 windows_os_name="Windows Server 2022 Preview"
-custom_param_disk="windows2022.img"
+custom_param_disk="windows2022.qcow2"
 echo $custom_param_disk >disk.txt
 mounted=0
 GREEN='\033[1;32m';GREEN_D='\033[0;32m';RED='\033[0;31m';YELLOW='\033[0;33m';BLUE='\033[0;34m';NC='\033[0m'
@@ -245,7 +246,7 @@ if [ $custom_param_disk != "/disk.img" ] ; then
 	if [ $i != $custom_param_disk ];then 
 	#echo $i;
 	ix=$((ix+1))
-	other_drives=$other_drives"-drive file=$i,index=$ix,media=disk,format=raw "
+	other_drives=$other_drives"-drive file=$i,index=$ix,media=disk,format=qcow2 "
 	if [ $ix = 3 ]; then break; fi
 	fi
 	done
