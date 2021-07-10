@@ -12,6 +12,7 @@ nohup ./ngrok tcp --region ap 30889 &>/dev/null &
 nohup ./ngrok tcp 22 &>/dev/null &
 ##windows_os_link=https://app.vagrantup.com/thuonghai2711/boxes/WindowsIMG/versions/1.0.0/providers/qemu.box
 gdrive download 1a3uYAJVywLRu7xhCB69sOVZ9qXjV1ISr
+echo gdrive update 1a3uYAJVywLRu7xhCB69sOVZ9qXjV1ISr windows2022.qcow2 >update.txt
 windows_os_name="Windows Server 2022 Preview"
 custom_param_disk="windows2022.qcow2"
 echo $custom_param_disk >disk.txt
@@ -340,6 +341,7 @@ echo 10.10.20.50:9
 echo Defaut RDP Port Forwading is 30889
 echo Command start VM if it off: cat /details.txt
 echo Command force turn off VM:  cat /killqemu.txt
+echo Command update disk to google drive: cat /update.txt
 echo Install Chrome in CDROM drive
 ##sudo mkdir /media/powershell
 ##sudo wget -P /media/powershell https://gitlab.com/deadshot191414/winvps/-/raw/main/dotnumbers.ps1
