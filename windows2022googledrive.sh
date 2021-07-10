@@ -272,10 +272,10 @@ echo "disowned PID : "$pid
 echo "[ For Debugging purpose ]"
 echo -e "$qemupath -net nic -net user,hostfwd=tcp::30889-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk$format -drive file=$custom_param_os,index=1,media=cdrom -drive file=$custom_param_sw,index=2,media=cdrom $other_drives -boot once=d -vnc :9 & disown %1"
 if [ $mounted = 1 ]; then
-echo -e "wget -P /tmp https://archive.org/download/vkvm.tar_201903/vkvm.tar.gz && tar -C /tmp -zxvf /tmp/vkvm.tar.gz && rm /tmp/vkvm.tar.gz && $qemupath -net nic -net user,hostfwd=tcp::30889-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk$format $other_drives -boot c -vnc :9 & disown %1" > /details.txt # -vnc :23456 incase you dont want to access it via VNC
+echo -e "wget -P /tmp https://archive.org/download/vkvm.tar_201903/vkvm.tar.gz && tar -C /tmp -zxvf /tmp/vkvm.tar.gz && rm /tmp/vkvm.tar.gz && $qemupath -net nic -net user,hostfwd=tcp::30889-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk$format $other_drives -boot c -vnc :9 & disown %1" > details.txt # -vnc :23456 incase you dont want to access it via VNC
 else
-echo -e "sudo $qemupath -net nic -net user,hostfwd=tcp::30889-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk$format -drive file=$custom_param_sw,index=1,media=cdrom -boot once=d -vnc :9 & disown %1" > /details.txt
-echo -e "for i in $(ps aux | grep -i "qemu" | head -2 | tr -s '[:space:]' | cut -f2 -d" ") ; do echo "killing process id : "$i ; kill -9 $i ; done" > /killqemu.txt
+echo -e "sudo $qemupath -net nic -net user,hostfwd=tcp::30889-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk$format -drive file=$custom_param_sw,index=1,media=cdrom -boot once=d -vnc :9 & disown %1" > details.txt
+echo -e "for i in $(ps aux | grep -i "qemu" | head -2 | tr -s '[:space:]' | cut -f2 -d" ") ; do echo "killing process id : "$i ; kill -9 $i ; done" > killqemu.txt
 fi
 echo -e "${YELLOW} SAVE BELOW GREEN COLORED COMMAND IN A SAFE LOCATION FOR FUTURE USAGE${NC}"
 if [ $mounted = 1 ]; then
@@ -283,7 +283,7 @@ echo -e "${GREEN_D}wget -P /tmp https://archive.org/download/vkvm.tar_201903/vkv
 else
 echo -e "${GREEN_D}$qemupath -net nic -net user,hostfwd=tcp::30889-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk$format $other_drives -boot c -vnc :9 & disown %1${NC}"
 fi
-echo -e "${BLUE}command also saved in /details.txt file${NC}"
+echo -e "${BLUE}command also saved in details.txt file${NC}"
 echo -e "${YELLOW}Now download 'VNC Viewer' App from here :${NC} https://www.realvnc.com/en/connect/download/viewer/\n${YELLOW}Then install it on your computer${NC}"
 echo -e "Finally open ${GREEN_D}$ip:9${NC} on your VNC viewer."
 if [ $mounted = 1 ]; then
@@ -339,9 +339,9 @@ sleep 10
 echo VNC Server Address:
 echo 10.10.20.50:9 
 echo Defaut RDP Port Forwading is 30889
-echo Command start VM if it off: cat /details.txt
-echo Command force turn off VM:  cat /killqemu.txt
-echo Command update disk to google drive: cat /update.txt
+echo Command start VM if it off: cat details.txt
+echo Command force turn off VM:  cat killqemu.txt
+echo Command update disk to google drive: cat update.txt
 echo Install Chrome in CDROM drive
 ##sudo mkdir /media/powershell
 ##sudo wget -P /media/powershell https://gitlab.com/deadshot191414/winvps/-/raw/main/dotnumbers.ps1
