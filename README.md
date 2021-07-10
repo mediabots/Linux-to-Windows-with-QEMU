@@ -148,6 +148,10 @@ Command kill QEMU :
 
 `cat /killqemu.txt`
 
+Command update disk to google drive: 
+
+`cat /update.txt`
+
 Copy the Output of the above result and Paste it & press Enter button.
 It would run the QEMU-KVM again. So your Windows Server would be accessible again :D
 
