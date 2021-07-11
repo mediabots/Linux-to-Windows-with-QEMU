@@ -323,9 +323,9 @@ sleep 5
 clear
 echo Your RDP IP Address:
 curl --silent --show-error http://127.0.0.1:4040/api/tunnels | sed -nE 's/.*public_url":"tcp:..([^"]*).*/\1/p'
-User: Administrator
-Pass: Thuonghai001
-Connect to VNC, choose disk for windows install when setup done use RDP to connect
+echo User: Administrator
+echo Pass: Thuonghai001
+echo Connect to VNC, choose disk for windows install when setup done use RDP to connect
 sleep 10
 echo VNC Server Address:
 echo 10.10.20.50:9 
