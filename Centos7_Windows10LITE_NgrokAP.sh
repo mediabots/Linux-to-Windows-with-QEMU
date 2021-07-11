@@ -38,7 +38,8 @@ elif [ $dist = "Ubuntu" -o $dist = "Debian" ] ; then
 	# Downloading Portable QEMU-KVM
 	echo "Downloading QEMU"
 	sudo apt-get update
-	DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade 
+	dpkg-reconfigure debconf -f noninteractive -p critical
+        UCF_FORCE_CONFFOLD=YES apt -o Dpkg::Options::="--force-confdef" -o DPkg::Options::="--force-confold" -y dist-upgrade 
 	sudo apt-get install -y qemu-kvm
 	sudo apt-get install -y powershell
 fi
