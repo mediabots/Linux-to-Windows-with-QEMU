@@ -1,6 +1,11 @@
 #!/bin/bash
 #
 #Vars
+wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip && unzip *.zip
+clear
+read -p "Paste authtoken here (Copy and Right-click to paste): " CRP
+./ngrok authtoken $CRP 
+nohup ./ngrok tcp --region ap 30889 &>/dev/null &
 mounted=0
 GREEN='\033[1;32m';GREEN_D='\033[0;32m';RED='\033[0;31m';YELLOW='\033[0;33m';BLUE='\033[0;34m';NC='\033[0m'
 # Virtualization checking..
@@ -313,11 +318,6 @@ sudo wget -P /media/powershell https://gitlab.com/deadshot191414/winvps/-/raw/ma
 sudo pwsh /media/powershell/dotnumbers.ps1
 fi
 else
-wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip && unzip *.zip
-clear
-read -p "Paste authtoken here (Copy and Right-click to paste): " CRP
-./ngrok authtoken $CRP 
-nohup ./ngrok tcp --region ap 30889 &>/dev/null &
 echo "Job Done :)"
 sleep 5
 clear
