@@ -38,6 +38,7 @@ elif [ $dist = "Ubuntu" -o $dist = "Debian" ] ; then
 	# Downloading Portable QEMU-KVM
 	echo "Downloading QEMU"
 	sudo apt-get update
+	yes|sudo apt-get upgrade -y
 	sudo apt-get install -y qemu-kvm
 	sudo apt-get install -y powershell
 fi
