@@ -39,11 +39,11 @@ if [ $dist = "CentOS" ] ; then
 	sudo yum remove xorg* -y
 	sudo yum remove gnome* -y
 	yum remove xrdp -y
-	#sudo yum update -y
+	##sudo yum update -y
 	sudo yum install -y qemu-kvm
 	sudo yum install libguestfs-tools -y
 	curl https://packages.microsoft.com/config/rhel/7/prod.repo | sudo tee /etc/yum.repos.d/microsoft.repo
-	#sudo yum install -y powershell
+	##sudo yum install -y powershell
 elif [ $dist = "Ubuntu" -o $dist = "Debian" ] ; then
 	printf "Y\n" | apt-get install sudo -y
 	sudo apt-get install vim curl genisoimage -y
@@ -53,8 +53,10 @@ elif [ $dist = "Ubuntu" -o $dist = "Debian" ] ; then
 	# Downloading Portable QEMU-KVM
 	echo "Downloading QEMU"
 	sudo apt-get update
+        dpkg-reconfigure debconf -f noninteractive -p critical
+        UCF_FORCE_CONFFOLD=YES apt -o Dpkg::Options::="--force-confdef" -o DPkg::Options::="--force-confold" -y dist-upgrade 
 	sudo apt-get install -y qemu-kvm
-	sudo apt-get install -y powershell
+	##sudo apt-get install -y powershell
 fi
 sudo ln -s /usr/bin/genisoimage /usr/bin/mkisofs
 # Downloading resources
