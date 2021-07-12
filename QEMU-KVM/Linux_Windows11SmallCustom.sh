@@ -9,7 +9,7 @@ wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip && unzip 
 clear
 read -p "Paste authtoken here (Copy and Right-click to paste): " CRP
 ./ngrok authtoken $CRP 
-nohup ./ngrok tcp --region ap 30889 &>/dev/null &
+##nohup ./ngrok tcp --region ap 30889 &>/dev/null &
 windows_os_link=https://app.vagrantup.com/thuonghai2711/boxes/WindowsQCOW2/versions/1.0.2/providers/qemu.box
 windows_os_name="Windows 11 Super Lite"
 custom_param_disk="lite11.qcow2"
