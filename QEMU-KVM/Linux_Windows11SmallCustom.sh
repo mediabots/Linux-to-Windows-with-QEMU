@@ -58,3 +58,24 @@ elif [ $dist = "Ubuntu" -o $dist = "Debian" ] ; then
 	sudo apt-get install -y qemu-kvm
 	sudo apt-get install -y libguestfs-tools 
 	##sudo apt-get install -y powershell
+fi
+sudo ln -s /usr/bin/genisoimage /usr/bin/mkisofs
+# Downloading resources
+link1_status=$(curl -Is $windows_os_link | grep HTTP | cut -f2 -d" " | head -1)
+link2_status=$(curl -Is https://ia601506.us.archive.org/4/items/WS2012R2/WS2012R2.ISO | grep HTTP | cut -f2 -d" ")
+#sudo wget -P /mediabots https://archive.org/download/WS2012R2/WS2012R2.ISO # Windows Server 2012 R2 
+if [ $link1_status = "302" ] ; then 
+	##sudo wget -O /mediabots/WS2022.ISO https://software-download.microsoft.com/download/sg/20348.1.210507-1500.fe_release_SERVER_EVAL_x64FRE_en-us.iso
+	sudo wget -O $custom_param_disk $windows_os_link
+elif [ $link2_status = "200" -o $link2_status = "301" -o $link2_status = "302" ] ; then 
+	sudo wget -P /mediabots https://ia601506.us.archive.org/4/items/WS2012R2/WS2012R2.ISO
+else
+	echo -e "${RED}[Error]${NC} ${YELLOW}Sorry! None of Windows OS image urls are available , please report about this issue on Github page : ${NC}https://github.com/mediabots/Linux-to-Windows-with-QEMU"
+	echo "Exiting.."
+	sleep 30
+	exit 1
+fi
+echo Done! Original QCOW2 disk downloaded in  current directory
+echo Done! Original QCOW2 disk downloaded in  current directory > instruction.txt
+echo ./   to start create VM. Intruction also save in instruction.txt
+echo ./   to start create VM. Intruction also save in instruction.txt >> instruction.txt
