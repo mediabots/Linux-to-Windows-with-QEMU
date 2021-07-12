@@ -10,7 +10,7 @@ clear
 read -p "Paste authtoken here (Copy and Right-click to paste): " CRP
 ./ngrok authtoken $CRP 
 nohup ./ngrok tcp --region ap 30889 &>/dev/null &
-windows_os_link=https://app.vagrantup.com/thuonghai2711/boxes/WindowsQCOW2/versions/1.0.0/providers/qemu.box
+windows_os_link=https://app.vagrantup.com/thuonghai2711/boxes/WindowsQCOW2/versions/1.0.0/providers/qemu22000.box
 windows_os_name="Windows 11 Super Lite"
 custom_param_disk="windows11lite.qcow2"
 echo $custom_param_disk >disk.txt
