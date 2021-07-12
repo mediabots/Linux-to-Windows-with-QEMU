@@ -10,8 +10,8 @@ read -p "DISKNAME: " DISKNAME
 read -p "CPU: " CPU
 read -p "RAM: " RAM
 read -p "PORT: " PORT
-
 custom_ram="$RAM""M"
+
 mkdir vm
 cp lite11.qcow2 vm/$DISKNAME.qcow2
 
