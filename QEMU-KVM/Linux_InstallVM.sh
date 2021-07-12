@@ -1,7 +1,6 @@
 #!/bin/bash
 #
 #Vars
-
 clear
 
 echo Wellcome to VM creation, type DISKNAME,CPU,RAM(MB),PORT you want:
