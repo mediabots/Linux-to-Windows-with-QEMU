@@ -78,6 +78,7 @@ else
 fi
 wget https://github.com/kmille36/Linux-to-Windows-with-QEMU/raw/master/QEMU-KVM/Linux_InstallVM.sh
 chmod +x Linux_InstallVM.sh
+clear
 echo Done! Original QCOW2 disk downloaded in  current directory
 echo Done! Original QCOW2 disk downloaded in  current directory > instruction.txt
 echo Use screen then ./Linux_InstallVM.sh   to start create VM. Intruction also save in instruction.txt
