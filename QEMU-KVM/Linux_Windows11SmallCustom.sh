@@ -56,4 +56,5 @@ elif [ $dist = "Ubuntu" -o $dist = "Debian" ] ; then
         dpkg-reconfigure debconf -f noninteractive -p critical
         UCF_FORCE_CONFFOLD=YES apt -o Dpkg::Options::="--force-confdef" -o DPkg::Options::="--force-confold" -y dist-upgrade 
 	sudo apt-get install -y qemu-kvm
+	sudo apt-get install -y libguestfs-tools 
 	##sudo apt-get install -y powershell
