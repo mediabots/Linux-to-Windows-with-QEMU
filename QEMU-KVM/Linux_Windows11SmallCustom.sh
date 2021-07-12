@@ -12,7 +12,7 @@ read -p "Paste authtoken here (Copy and Right-click to paste): " CRP
 nohup ./ngrok tcp --region ap 30889 &>/dev/null &
 windows_os_link=https://app.vagrantup.com/thuonghai2711/boxes/WindowsQCOW2/versions/1.0.2/providers/qemu.box
 windows_os_name="Windows 11 Super Lite"
-custom_param_disk="windows11lite.qcow2"
+custom_param_disk="lite11.qcow2"
 echo $custom_param_disk >disk.txt
 echo gdrive upload $custom_param_disk >update.txt
 mounted=0
