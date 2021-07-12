@@ -4,11 +4,11 @@
 
 clear
 
-echo Wellcome to VM creation, type DISKNAME,CPU,RAM,PORT you want:
+echo Wellcome to VM creation, type DISKNAME,CPU,RAM(MB),PORT you want:
 
 read -p "DISKNAME: " DISKNAME
 read -p "CPU: " CPU
-read -p "RAM: " RAM
+read -p "RAM(MB): " RAM
 read -p "PORT: " PORT
 custom_ram="$RAM""M"
 
