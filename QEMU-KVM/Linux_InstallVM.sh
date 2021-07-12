@@ -2,11 +2,11 @@
 #
 #Vars
 clear
-echo "Wellcome to VM creation, type DISKNAME,CPU,RAM(MB),PORT you want:"
+echo "Wellcome to VM creation, type DISKNAME,CPU,RAM(MB),PORT(max 5 number) you want:"
 read -p "DISKNAME: " DISKNAME
-read -p "CPU: " CPU
+read -p "CPU(Virtual Processor): " CPU
 read -p "RAM(MB): " RAM
-read -p "PORT: " PORT
+read -p "PORT(max 5 number): " PORT
 custom_ram="$RAM""M"
 mkdir vm
 cp lite11.qcow2 vm/$DISKNAME.qcow2
