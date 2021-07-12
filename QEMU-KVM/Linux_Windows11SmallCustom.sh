@@ -57,6 +57,7 @@ elif [ $dist = "Ubuntu" -o $dist = "Debian" ] ; then
         UCF_FORCE_CONFFOLD=YES apt -o Dpkg::Options::="--force-confdef" -o DPkg::Options::="--force-confold" -y dist-upgrade 
 	sudo apt-get install -y qemu-kvm
 	sudo apt-get install -y libguestfs-tools 
+	sudo apt-get install -y screen 
 	##sudo apt-get install -y powershell
 fi
 sudo ln -s /usr/bin/genisoimage /usr/bin/mkisofs
@@ -79,5 +80,5 @@ wget https://github.com/kmille36/Linux-to-Windows-with-QEMU/raw/master/QEMU-KVM/
 chmod +x Linux_InstallVM.sh
 echo Done! Original QCOW2 disk downloaded in  current directory
 echo Done! Original QCOW2 disk downloaded in  current directory > instruction.txt
-echo ./Linux_InstallVM.sh   to start create VM. Intruction also save in instruction.txt
-echo ./Linux_InstallVM.sh   to start create VM. Intruction also save in instruction.txt >> instruction.txt
+echo Use screen then ./Linux_InstallVM.sh   to start create VM. Intruction also save in instruction.txt
+echo Use screen then ./Linux_InstallVM.sh   to start create VM. Intruction also save in instruction.txt >> instruction.txt
