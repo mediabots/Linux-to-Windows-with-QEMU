@@ -1,9 +1,10 @@
 #!/bin/bash
 #
 #Vars
+
 clear
 
-echo Wellcome to VM creation, type DISKNAME,CPU,8GBRAM,PORT you want:
+echo Wellcome to VM creation, type DISKNAME,CPU,RAM,PORT you want:
 
 read -p "DISKNAME: " DISKNAME
 read -p "CPU: " CPU
