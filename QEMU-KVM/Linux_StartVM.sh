@@ -5,7 +5,7 @@ qemupath=$(echo cat qemupath.txt | bash)
 clear
 echo "Wellcome to VM start, type DISKNAME,CPU,RAM(MB),PORT(Max 5 number) you want:"
 cd vm 
-ls -l --block-size=GB
+ls -l --block-size=GB | cut -f1 -d. | uniq -c
 read -p "DISK NAME: " DISKNAME
 read -p "DISK SIZE(Blank for default): " DISKSIZE
 read -p "CPU(Virtual Processor): " CPU
