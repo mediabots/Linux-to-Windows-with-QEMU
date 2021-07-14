@@ -76,6 +76,15 @@ else
 	sleep 30
 	exit 1
 fi
+dist=$(hostnamectl | egrep "Operating System" | cut -f2 -d":" | cut -f2 -d " ")
+if [ $dist	= "CentOS" ] ; then
+	qemupath=$(whereis qemu-kvm | sed "s/ /\n/g" | egrep "^/usr/libexec/")
+	#b=($(lsblk | egrep "part"  |  tr -s '[:space:]' | cut -f1 -d" " | tr -cd "[:print:]\n" | sed 's/^/\/dev\//'))
+else
+	qemupath=$(whereis qemu-system-x86_64 | cut -f2 -d" ")
+	#b=($(fdisk -l | grep "^/dev/" | tr -d "*" | tr -s '[:space:]' | cut -f1 -d" "))
+fi
+echo $qemupath >qemupath.txt
 wget https://github.com/kmille36/Linux-to-Windows-with-QEMU/raw/master/QEMU-KVM/Linux_InstallVM.sh
 wget https://github.com/kmille36/Linux-to-Windows-with-QEMU/raw/master/QEMU-KVM/Linux_StartVM.sh
 chmod +x Linux_InstallVM.sh
