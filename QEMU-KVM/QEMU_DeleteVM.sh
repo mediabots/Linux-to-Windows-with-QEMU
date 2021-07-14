@@ -9,3 +9,4 @@ read -p "DISK NAME: " DISKNAME
 rm  $DISKNAME.qcow2
 rm  $DISKNAME.txt
 cd ..
+echo "Delete disk $DISKNAME.qcow2 successfully!! "
