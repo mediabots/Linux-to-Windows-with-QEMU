@@ -12,6 +12,8 @@ read -p "PORT(Max 5 number): " PORT
 custom_ram="$RAM""M"
 custom_disk="$DISKSIZE""GB"
 mkdir vm
+echo $! > $DISKNAME.txt
+cp $DISKNAME.txt vm/$DISKNAME.txt
 cp lite11.qcow2 vm/$DISKNAME.qcow2
 cd vm
 qemu-img resize $DISKNAME.qcow2 $custom_disk
