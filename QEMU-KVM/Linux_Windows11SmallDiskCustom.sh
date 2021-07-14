@@ -85,7 +85,7 @@ else
 	#b=($(fdisk -l | grep "^/dev/" | tr -d "*" | tr -s '[:space:]' | cut -f1 -d" "))
 fi
 echo $qemupath >qemupath.txt
-wget https://github.com/kmille36/Linux-to-Windows-with-QEMU/raw/master/QEMU-KVM/Linux_InstallVM.sh
+wget https://github.com/kmille36/Linux-to-Windows-with-QEMU/raw/master/QEMU-KVM/Linux_CreateVM.sh
 wget https://github.com/kmille36/Linux-to-Windows-with-QEMU/raw/master/QEMU-KVM/Linux_StartVM.sh
 chmod +x Linux_InstallVM.sh
 chmod +x Linux_StartVM.sh
@@ -94,8 +94,8 @@ echo Coder by: fb.com/thuong.hai.581
 echo Coder by: fb.com/thuong.hai.581 > instruction.txt
 echo Done! Original QCOW2 disk downloaded in  current directory
 echo Done! Original QCOW2 disk downloaded in  current directory >> instruction.txt
-echo Use screen then ./Linux_InstallVM.sh to start create VM. 
-echo Use screen then ./Linux_InstallVM.sh to start create VM. >> instruction.txt
+echo Use screen then ./Linux_CreateVM.sh to start create VM. 
+echo Use screen then ./Linux_CreateVM.sh to start create VM. >> instruction.txt
 echo Use screen then ./Linux_StartVM.sh to start VM if it shutdown. 
 echo Use screen then ./Linux_StartVM.sh to start VM if it shutdown. >> instruction.txt
 echo Intruction also save in instruction.txt
