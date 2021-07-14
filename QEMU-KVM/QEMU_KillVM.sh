@@ -9,3 +9,4 @@ read -p "DISK NAME: " DISKNAME
 vm=$(echo cat $DISKNAME.txt | bash)
 kill $vm 
 cd ..
+echo "Kill VM $DISKNAME $vm successfully!! "
