@@ -87,7 +87,7 @@ fi
 echo $qemupath >qemupath.txt
 wget https://github.com/kmille36/Linux-to-Windows-with-QEMU/raw/master/QEMU-KVM/Linux_CreateVM.sh
 wget https://github.com/kmille36/Linux-to-Windows-with-QEMU/raw/master/QEMU-KVM/Linux_StartVM.sh
-chmod +x Linux_InstallVM.sh
+chmod +x Linux_CreateVM.sh
 chmod +x Linux_StartVM.sh
 clear
 echo Coder by: fb.com/thuong.hai.581
