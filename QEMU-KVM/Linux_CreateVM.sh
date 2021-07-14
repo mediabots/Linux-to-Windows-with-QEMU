@@ -1,6 +1,7 @@
 #!/bin/bash
 #
 #Vars
+qemupath=$(echo cat qemupath.txt | bash)
 clear
 echo "Wellcome to VM creation, type DISKNAME,CPU,RAM(MB),PORT(Max 5 number) you want:"
 read -p "DISK NAME: " DISKNAME
@@ -15,7 +16,7 @@ cp lite11.qcow2 vm/$DISKNAME.qcow2
 cd vm
 qemu-img resize $DISKNAME.qcow2 $custom_disk
 cd ..
-sudo /usr/bin/qemu-system-x86_64 -nographic -net nic -net user,hostfwd=tcp::$PORT-:3389 -show-cursor -m $custom_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$CPU -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=vm/$DISKNAME.qcow2,index=0,media=disk,format=qcow2 -boot once=d & disown %1
+sudo $qemupath -nographic -net nic -net user,hostfwd=tcp::$PORT-:3389 -show-cursor -m $custom_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$CPU -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=vm/$DISKNAME.qcow2,index=0,media=disk,format=qcow2 -boot once=d & disown %1
 echo VM Specifications: $CPU CPU , $custom_ram RAM
 echo "Successfully!! Your VM start with RDP Port $PORT"
 echo "To check Qemu VM Process:  ps auxw |grep qemu"
