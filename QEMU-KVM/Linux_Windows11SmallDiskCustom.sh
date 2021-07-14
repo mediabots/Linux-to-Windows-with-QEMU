@@ -85,19 +85,27 @@ else
 	#b=($(fdisk -l | grep "^/dev/" | tr -d "*" | tr -s '[:space:]' | cut -f1 -d" "))
 fi
 echo $qemupath >qemupath.txt
-wget https://github.com/kmille36/Linux-to-Windows-with-QEMU/raw/master/QEMU-KVM/Linux_CreateVM.sh
-wget https://github.com/kmille36/Linux-to-Windows-with-QEMU/raw/master/QEMU-KVM/Linux_StartVM.sh
-chmod +x Linux_CreateVM.sh
-chmod +x Linux_StartVM.sh
+wget https://github.com/kmille36/Linux-to-Windows-with-QEMU/raw/master/QEMU-KVM/QEMU_CreateVM.sh
+wget https://github.com/kmille36/Linux-to-Windows-with-QEMU/raw/master/QEMU-KVM/QEMU_StartVM.sh
+wget https://github.com/kmille36/Linux-to-Windows-with-QEMU/raw/master/QEMU-KVM/QEMU_KillVM.sh
+wget https://github.com/kmille36/Linux-to-Windows-with-QEMU/raw/master/QEMU-KVM/QEMU_DeleteVM.sh
+chmod +x QEMU_CreateVM.sh
+chmod +x QEMU_StartVM.sh
+chmod +x QEMU_KillVM.sh
+chmod +x QEMU_DeleteVM.sh
 clear
 echo Coder by: fb.com/thuong.hai.581
 echo Coder by: fb.com/thuong.hai.581 > instruction.txt
 echo Done! Original QCOW2 disk downloaded in  current directory
 echo Done! Original QCOW2 disk downloaded in  current directory >> instruction.txt
-echo Use screen then ./Linux_CreateVM.sh to start create VM. 
-echo Use screen then ./Linux_CreateVM.sh to start create VM. >> instruction.txt
-echo Use screen then ./Linux_StartVM.sh to start VM if it shutdown. 
-echo Use screen then ./Linux_StartVM.sh to start VM if it shutdown. >> instruction.txt
+echo Use screen then ./QEMU_CreateVM.sh to start create VM. 
+echo Use screen then ./QEMU_CreateVM.sh to start create VM. >> instruction.txt
+echo Use screen then ./QEMU_StartVM.sh to start VM if it shutdown. 
+echo Use screen then ./QEMU_StartVM.sh to start VM if it shutdown. >> instruction.txt
+echo Use screen then ./QEMU_KillVM.sh to kill VM process. 
+echo Use screen then ./QEMU_KillVM.sh to kill VM process. >> instruction.txt
+echo Use screen then ./QEMU_DeleteVM.sh to delete VM disk. 
+echo Use screen then ./QEMU_DeleteVM.sh to delete VM disk. >> instruction.txt
 echo Intruction also save in instruction.txt
 echo Intruction also save in instruction.txt >> instruction.txt
 fi
