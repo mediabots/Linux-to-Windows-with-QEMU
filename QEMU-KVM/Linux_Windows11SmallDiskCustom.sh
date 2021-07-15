@@ -106,6 +106,10 @@ echo Use screen then ./QEMU_KillVM.sh to kill VM process.
 echo Use screen then ./QEMU_KillVM.sh to kill VM process. >> instruction.txt
 echo Use screen then ./QEMU_DeleteVM.sh to delete VM disk. 
 echo Use screen then ./QEMU_DeleteVM.sh to delete VM disk. >> instruction.txt
+echo RDP User: Administrator
+echo RDP User: Administrator >> instruction.txt
+echo RDP Password: Thuonghai001
+echo RDP Password: Thuonghai001 >> instruction.txt
 echo Intruction also save in instruction.txt
 echo Intruction also save in instruction.txt >> instruction.txt
 fi
