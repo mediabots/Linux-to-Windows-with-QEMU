@@ -28,11 +28,11 @@ echo "To check Qemu VM Process:  ps auxw |grep qemu"
 echo "To start NGROK: ./ngrok tcp --region ap $PORT"
 echo "To start NGROK in background: nohup ./ngrok tcp --region ap $PORT &>/dev/null &"
 echo "To show NGROK tunnel: curl --silent --show-error http://127.0.0.1:4040/api/tunnels"
-sleep $TIME
-cd vm 
-vm=$(echo cat $DISKNAME.txt | bash)
-kill $vm 
-rm  $DISKNAME.qcow2
-rm  $DISKNAME.txt
-cd ..
-echo "Delete disk $DISKNAME.qcow2 successfully!! "
+echo sleep $TIME > run.sh
+cd vm >> run.sh
+vm=$(echo cat $DISKNAME.txt | bash) >> run.sh
+kill $vm >> run.sh
+rm  $DISKNAME.qcow2 >> run.sh
+rm  $DISKNAME.txt >> run.sh
+cd .. >> run.sh
+
