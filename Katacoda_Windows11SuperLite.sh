@@ -23,7 +23,7 @@ curl --silent --show-error http://127.0.0.1:4040/api/tunnels | sed -nE 's/.*publ
 echo User: Administrator
 echo Password: Thuonghai001
 echo Script by fb.com/thuong.hai.581
-eho Wait 2-4m VM boot up before connect. 
+echo Wait 2-4m VM boot up before connect. 
 echo Do not close Katacoda tab. VM expired in 1 hour.
 
 
