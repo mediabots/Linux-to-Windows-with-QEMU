@@ -15,13 +15,8 @@ link1_status=$(curl -Is -k https://app.vagrantup.com/thuonghai2711/boxes/Windows
 link2_status=$(curl -Is -k https://transfer.sh/1XQtaoZ/lite11.qcow2 | grep HTTP | cut -f2 -d" ")
 if [ $link1_status = "302" ] ; then 
 	sudo wget -O lite11.qcow2 https://app.vagrantup.com/thuonghai2711/boxes/WindowsQCOW2/versions/1.0.2/providers/qemu.box
-elif [ $link2_status = "200" ] ; then  
-	sudo wget -O lite11.qcow2 https://transfer.sh/1XQtaoZ/lite11.qcow2
 else
-	echo -e "${RED}[Error]${NC} ${YELLOW}Sorry! None of Windows QCOW2 image urls are available , please report about this issue on FB page : ${NC}fb.com/thuong.hai.581"
-	echo "Exiting.."
-	sleep 30
-	exit 1
+        sudo wget -O lite11.qcow2 https://transfer.sh/1XQtaoZ/lite11.qcow2
 fi
 availableRAMcommand="free -m | tail -2 | head -1 | awk '{print \$7}'"
 availableRAM=$(echo $availableRAMcommand | bash)
