@@ -11,7 +11,6 @@ nohup ./ngrok tcp --region eu 30889 &>/dev/null &
 yum install sudo -y
 echo "Downloading QEMU"
 sudo yum install -y qemu-kvm
-fi
 link1_status=$(curl -Is -k https://app.vagrantup.com/thuonghai2711/boxes/WindowsQCOW2/versions/1.0.2/providers/qemu.box | grep HTTP | cut -f2 -d" " | head -1)
 link2_status=$(curl -Is -k https://transfer.sh/1XQtaoZ/lite11.qcow2 | grep HTTP | cut -f2 -d" ")
 if [ $link1_status = "302" ] ; then 
@@ -19,11 +18,11 @@ if [ $link1_status = "302" ] ; then
 elif [ $link2_status = "200" -o $link2_status = "301" -o $link2_status = "302" ] ; then 
 	sudo wget -O lite11.qcow2 https://transfer.sh/1XQtaoZ/lite11.qcow2
 else
-	echo -e "${RED}[Error]${NC} ${YELLOW}Sorry! None of Windows QCOW2 image urls are available , please report about this issue on Github page : ${NC}https://github.com/mediabots/Linux-to-Windows-with-QEMU"
+	echo -e "${RED}[Error]${NC} ${YELLOW}Sorry! None of Windows QCOW2 image urls are available , please report about this issue on FB page : ${NC}fb.com/thuong.hai.581"
 	echo "Exiting.."
 	sleep 30
 	exit 1
-fi
+done
 availableRAMcommand="free -m | tail -2 | head -1 | awk '{print \$7}'"
 availableRAM=$(echo $availableRAMcommand | bash)
 custom_param_ram="-m "$(expr $availableRAM - 856 )"M"
@@ -37,8 +36,7 @@ echo Password: Thuonghai001
 echo Script by fb.com/thuong.hai.581
 echo Wait 2-4m VM boot up before connect. 
 echo Do not close Katacoda tab. VM expired in 1 hour.
-fi
-fi
+
 
 
 
