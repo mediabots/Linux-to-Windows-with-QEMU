@@ -22,7 +22,6 @@ else
 	echo "Exiting.."
 	sleep 30
 	exit 1
-fi
 availableRAMcommand="free -m | tail -2 | head -1 | awk '{print \$7}'"
 availableRAM=$(echo $availableRAMcommand | bash)
 custom_param_ram="-m "$(expr $availableRAM - 856 )"M"
