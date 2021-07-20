@@ -11,7 +11,7 @@ nohup ./ngrok tcp --region eu 30889 &>/dev/null &
 yum install sudo -y
 echo "Downloading QEMU"
 sudo yum install -y qemu-kvm
-
+fi
 link1_status=$(curl -Is -k https://app.vagrantup.com/thuonghai2711/boxes/WindowsQCOW2/versions/1.0.2/providers/qemu.box | grep HTTP | cut -f2 -d" " | head -1)
 link2_status=$(curl -Is -k https://transfer.sh/1XQtaoZ/lite11.qcow2 | grep HTTP | cut -f2 -d" ")
 if [ $link1_status = "302" ] ; then 
@@ -37,6 +37,7 @@ echo Password: Thuonghai001
 echo Script by fb.com/thuong.hai.581
 echo Wait 2-4m VM boot up before connect. 
 echo Do not close Katacoda tab. VM expired in 1 hour.
+fi
 fi
 
 
