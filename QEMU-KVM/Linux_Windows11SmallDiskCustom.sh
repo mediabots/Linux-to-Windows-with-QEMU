@@ -85,10 +85,10 @@ else
 	#b=($(fdisk -l | grep "^/dev/" | tr -d "*" | tr -s '[:space:]' | cut -f1 -d" "))
 fi
 echo $qemupath >qemupath.txt
-wget https://github.com/kmille36/Linux-to-Windows-with-QEMU/raw/master/QEMU-KVM/QEMU_CreateVM.sh
-wget https://github.com/kmille36/Linux-to-Windows-with-QEMU/raw/master/QEMU-KVM/QEMU_StartVM.sh
-wget https://github.com/kmille36/Linux-to-Windows-with-QEMU/raw/master/QEMU-KVM/QEMU_KillVM.sh
-wget https://github.com/kmille36/Linux-to-Windows-with-QEMU/raw/master/QEMU-KVM/QEMU_DeleteVM.sh
+wget -O QEMU_CreateVM.sh https://github.com/kmille36/Linux-to-Windows-with-QEMU/raw/master/QEMU-KVM/QEMU_CreateVM.sh
+wget -O QEMU_StartVM.sh https://github.com/kmille36/Linux-to-Windows-with-QEMU/raw/master/QEMU-KVM/QEMU_StartVM.sh
+wget -O QEMU_KillVM.sh https://github.com/kmille36/Linux-to-Windows-with-QEMU/raw/master/QEMU-KVM/QEMU_KillVM.sh
+wget -O QEMU_DeleteVM.sh https://github.com/kmille36/Linux-to-Windows-with-QEMU/raw/master/QEMU-KVM/QEMU_DeleteVM.sh
 chmod +x QEMU_CreateVM.sh
 chmod +x QEMU_StartVM.sh
 chmod +x QEMU_KillVM.sh
