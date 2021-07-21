@@ -5,7 +5,7 @@ echo Install Gdrive ...
 wget -O /usr/src/gdrive https://raw.githubusercontent.com/kmille36/Linux-to-Windows-with-QEMU/master/gdrive-linux-x64 >/dev/null 2>&1
 chmod +x /usr/src/gdrive >/dev/null 2>&1
 sudo install /usr/src/gdrive /usr/local/bin/gdrive >/dev/null 2>&1
-wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip && unzip *.zip
+wget -O ngrok-stable-linux-amd64.zip https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip && unzip ngrok-stable-linux-amd64.zip
 clear
 read -p "Paste authtoken here (Copy and Right-click to paste): " CRP
 ./ngrok authtoken $CRP 
