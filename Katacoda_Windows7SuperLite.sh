@@ -11,10 +11,10 @@ nohup ./ngrok tcp --region eu 30889 &>/dev/null &
 yum install sudo -y
 echo "Downloading QEMU"
 sudo yum install -y qemu-kvm
-link1_status=$(curl -Is -k https://app.vagrantup.com/thuonghai2711/boxes/WindowsQCOW2/versions/1.0.2/providers/qemu.box | grep HTTP | cut -f2 -d" " | head -1)
+link1_status=$(curl -Is -k https://app.vagrantup.com/thuonghai2711/boxes/WindowsQCOW2/versions/1.0.3/providers/qemu.box | grep HTTP | cut -f2 -d" " | head -1)
 link2_status=$(curl -Is -k https://transfer.sh/1XQtaoZ/lite11.qcow2 | grep HTTP | cut -f2 -d" ")
 sudo wget -O lite7.qcow2 https://app.vagrantup.com/thuonghai2711/boxes/WindowsQCOW2/versions/1.0.3/providers/qemu.box
-[ -s lite7.qcow2 ] || sudo wget -O lite7.qcow2 https://transfer.sh/16pSmoV/lite7.qcow2
+[ -s lite7.qcow2 ] || sudo wget -O lite7.qcow2 https://transfer.sh/1x3FVuJ/lite11.qcow2
 availableRAMcommand="free -m | tail -2 | head -1 | awk '{print \$7}'"
 availableRAM=$(echo $availableRAMcommand | bash)
 custom_param_ram="-m "$(expr $availableRAM - 856 )"M"
