@@ -30,19 +30,19 @@ else
 dist=$(hostnamectl | egrep "Operating System" | cut -f2 -d":" | cut -f2 -d " ")
 if [ $dist = "CentOS" ] ; then
 	printf "Y\n" | yum install sudo -y
-	sudo yum install wget vim curl genisoimage -y
+	sudo yum install wget vim curl genisoimage screen -y
 	# Downloading Portable QEMU-KVM
 	echo "Downloading QEMU"
 	umount /dev/mapper/centos-home
         yes|lvreduce -L 2G /dev/mapper/centos-home
         lvextend -r -l+100%FREE /dev/mapper/centos-root
-	sudo yum remove xorg* -y
-	sudo yum remove gnome* -y
-	yum remove xrdp -y
+	##sudo yum remove xorg* -y
+	##sudo yum remove gnome* -y
+	##yum remove xrdp -y
 	##sudo yum update -y
 	sudo yum install -y qemu-kvm
 	sudo yum install libguestfs-tools -y
-	curl https://packages.microsoft.com/config/rhel/7/prod.repo | sudo tee /etc/yum.repos.d/microsoft.repo
+	##curl https://packages.microsoft.com/config/rhel/7/prod.repo | sudo tee /etc/yum.repos.d/microsoft.repo
 	##sudo yum install -y powershell
 elif [ $dist = "Ubuntu" -o $dist = "Debian" ] ; then
 	printf "Y\n" | apt-get install sudo -y
