@@ -19,4 +19,4 @@ curl --silent --show-error http://127.0.0.1:4040/api/tunnels | sed -nE 's/.*publ
 echo "Note: Use Right-Click To Copy"
 echo Script by fb.com/thuong.hai.581
 cpu=$(echo nproc | bash)
-./dist/proot -S . qemu-system-x86_64 -vnc :0 -hda lite7.qcow2  -smp cores=$cpu  -m 3072M -machine usb=on -device usb-tablet > /dev/null 2>&1
+./dist/proot -S . qemu-system-x86_64 -vnc :0 -hda win.qcow2 -smp 8 -accel tcg,thread=multi -m 4096 -machine usb=on -device usb-tablet > /dev/null 2>&1
