@@ -12,6 +12,6 @@ echo Installing QEMU...
 ./dist/proot -S . apt install qemu-system-x86 curl -y &>/dev/null & 
 echo Downloading Windows Disk...
 curl -L -o lite7.qcow2 https://app.vagrantup.com/thuonghai2711/boxes/WindowsQCOW2/versions/1.0.7/providers/qemu.box
-./dist/proot -S . qemu-system-x86_64 -vnc :0 -hda lite7.qcow2  -smp cores=2  -m 4096M -machine usb=on -device usb-tablet
+./dist/proot -S . qemu-system-x86_64 -vnc :0 -hda lite7.qcow2  -smp cores=2  -m 8192M -machine usb=on -device usb-tablet
 
 
