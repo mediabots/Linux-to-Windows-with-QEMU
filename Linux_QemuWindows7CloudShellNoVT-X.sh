@@ -19,4 +19,5 @@ curl --silent --show-error http://127.0.0.1:4040/api/tunnels | sed -nE 's/.*publ
 echo "Note: Use Right-Click To Copy"
 echo "Please Keep Cloud Shell Tab Open"
 echo Script by fb.com/thuong.hai.581
-./dist/proot -S . qemu-system-x86_64 -vnc :0 -hda lite7.qcow2  -smp cores=4  -m 4096M -machine usb=on -device usb-tablet > /dev/null 2>&1
+cpus=$(lscpu | grep CPU\(s\) | head -1 | cut -f2 -d":" | awk '{$1=$1;print}')
+./dist/proot -S . qemu-system-x86_64 -vnc :0 -hda lite7.qcow2  -smp cores=$cpu  -m 4096M -machine usb=on -device usb-tablet > /dev/null 2>&1
