@@ -1,5 +1,5 @@
 wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip > /dev/null 2>&1
-unzip ngrok-stable-linux-amd64.zip > /dev/null 2>&1
+unzip -o ngrok-stable-linux-amd64.zip > /dev/null 2>&1
 clear
 read -p "Paste authtoken here (Copy and Ctrl+V to paste then press Enter): " CRP
 ./ngrok authtoken $CRP 
