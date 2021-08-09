@@ -13,6 +13,6 @@ echo Installing QEMU (2-3m)...
 echo Downloading Windows Disk...
 curl -L -o lite10.qcow2 https://app.vagrantup.com/thuonghai2711/boxes/WindowsQCOW2/versions/1.1.3/providers/qemu.box
 qemu-img resize lite10.qcow2 100G
-./dist/proot -S . qemu-system-x86_64 -vnc :0 -hda lite10.qcow2  -smp cores=2  -m 8192M -machine usb=on -device usb-tablet
+./dist/proot -S . qemu-system-x86_64 -vnc :0 -hda lite10.qcow2  -smp cores=2  -m 8192M -machine usb=on -device usb-tablet > /dev/null 2>&1
 
 
