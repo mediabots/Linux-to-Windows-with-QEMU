@@ -21,4 +21,3 @@ echo "Please Keep Cloud Shell Tab Open"
 echo Script by fb.com/thuong.hai.581
 cpu=$(echo nproc | bash)
 ./dist/proot -S . qemu-system-x86_64 -vnc :0 -hda lite7.qcow2  -smp cores=$cpu  -m 3072M -machine usb=on -device usb-tablet > /dev/null 2>&1
-© 2021 
