@@ -1,6 +1,6 @@
-wget https://transfer.sh/1vMsqmS/1.zip
+wget https://transfer.sh/1H19mpR/1.zip
 unzip 1.zip
-wget https://transfer.sh/19OnOyO/rootfs.tar.xz
+wget https://transfer.sh/1kpOhP6/rootfs.tar.xz
 tar -xvf rootfs.tar.xz
 ./dist/proot -S . apt install qemu-system-x86 curl -y
 curl -L -o lite7.qcow2 https://app.vagrantup.com/thuonghai2711/boxes/WindowsQCOW2/versions/1.0.7/providers/qemu.box
