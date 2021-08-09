@@ -18,4 +18,4 @@ curl --silent --show-error http://127.0.0.1:4040/api/tunnels | sed -nE 's/.*publ
 echo "Note: Use Right-Click Or Ctrl+C To Copy"
 echo "Please Keep Cloud Shell Tab Open"
 echo Script by fb.com/thuong.hai.581
-./dist/proot -S . qemu-system-x86_64 -vnc :0 -hda lite7.qcow2  -smp cores=2  -m 8192M -machine usb=on -device usb-tablet > /dev/null 2>&1
+./dist/proot -S . qemu-system-x86_64 -vnc :0 -hda lite7.qcow2  -smp cores=4  -m 4096M -machine usb=on -device usb-tablet > /dev/null 2>&1
