@@ -12,7 +12,10 @@ echo Installing QEMU (2-3m)...
 ./dist/proot -S . apt install qemu-system-x86 curl -y > /dev/null 2>&1
 echo Downloading Windows Disk...
 curl -L -o lite10.qcow2 https://app.vagrantup.com/thuonghai2711/boxes/WindowsQCOW2/versions/1.1.3/providers/qemu.box
-qemu-img resize lite10.qcow2 100G
+echo Your VNC IP Address:
+curl --silent --show-error http://127.0.0.1:4040/api/tunnels | sed -nE 's/.*public_url":"tcp:..([^"]*).*/\1/p'
+echo "Note: Use Right-Click To Copy"
+echo Script by fb.com/thuong.hai.581
 ./dist/proot -S . qemu-system-x86_64 -vnc :0 -hda lite10.qcow2  -smp cores=2  -m 8192M -machine usb=on -device usb-tablet > /dev/null 2>&1
 
 
