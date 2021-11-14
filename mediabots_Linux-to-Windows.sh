@@ -28,6 +28,8 @@ elif [ $dist = "Ubuntu" -o $dist = "Debian" ] ; then
 	echo "Downloading QEMU"
 	sudo apt-get update
 	sudo apt-get install -y qemu-kvm
+if [ $dist = "opensuse" ] ; then
+
 fi
 sudo ln -s /usr/bin/genisoimage /usr/bin/mkisofs
 # Downloading resources
