@@ -168,7 +168,7 @@ Right now, Script supports Ubuntu,Debian,CentOS Distros.
 
 But very soon I would add the support for all other Linux Distros too.
 
-So stay tuned.
+So stay tuned..
 
 ---
 
