@@ -1,3 +1,4 @@
+clear
 echo Getting ready...
 sudo apt-get update -y > /dev/null 2>&1
 nohup sudo apt-get install -y qemu-kvm &>/dev/null &
