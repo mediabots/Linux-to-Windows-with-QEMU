@@ -12,7 +12,7 @@ custom_param_ram="-m "$(expr $availableRAM - 512)"M"
 cpus=$(lscpu | grep CPU\(s\) | head -1 | cut -f2 -d":" | awk '{$1=$1;print}')
 qemu-img resize windows10.raw 80G
 mv /usr/bin/qemu-system-x86_64 /usr/bin/python
-nohup sudo python -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram -soundhw hda -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=windows10.raw,index=0,media=disk,format=raw,if=virtio -boot once=d -vnc :1 &>/dev/null &
+nohup sudo python -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor -m 12G -soundhw hda -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=windows10.raw,index=0,media=disk,format=raw,if=virtio -boot once=d -vnc :1 &>/dev/null &
 clear
 
 echo "======================="
