@@ -52,8 +52,9 @@ sleep 1
 if curl --silent --show-error http://127.0.0.1:4040/api/tunnels  > /dev/null 2>&1; then echo OK; else echo "Ngrok Error! Please try again!" && sleep 1 && bash Win10Lite-ngrok.sh; fi
 clear
 echo "NoMachine: https://www.nomachine.com/download"
-echo Done! NoMachine Information:
+echo Done! RDP Information:
 echo IP Address:
 curl --silent --show-error http://127.0.0.1:4040/api/tunnels | sed -nE 's/.*public_url":"tcp:..([^"]*).*/\1/p' 
 echo User: Administrator
 echo Passwd: Thuonghai001
+echo Note: Wait few minutes windows boot up before connect.
