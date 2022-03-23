@@ -1,3 +1,4 @@
+cd $HOME
 clear
 echo Getting ready...
 sudo apt-get update -y > /dev/null 2>&1
