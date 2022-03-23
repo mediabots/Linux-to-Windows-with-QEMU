@@ -49,7 +49,7 @@ echo "in - India (Mumbai)"
 read -p "choose ngrok region: " CRP
 ./ngrok tcp --region $CRP 3389 &>/dev/null &
 sleep 1
-if curl --silent --show-error http://127.0.0.1:4040/api/tunnels  > /dev/null 2>&1; then echo OK; else echo "Ngrok Error! Please try again!" && sleep 1 && bash Win11Lite-ngrok.sh; fi
+if curl --silent --show-error http://127.0.0.1:4040/api/tunnels  > /dev/null 2>&1; then echo OK; else echo "Ngrok Error! Please try again!" && sleep 1 && bash Win10Lite-ngrok.sh; fi
 clear
 echo "NoMachine: https://www.nomachine.com/download"
 echo Done! NoMachine Information:
