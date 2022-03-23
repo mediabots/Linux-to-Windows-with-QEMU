@@ -5,7 +5,7 @@ sudo apt-get update -y > /dev/null 2>&1
 echo "apt remove -y docker docker.io" > vm
 echo "sudo apt-get install -y qemu-kvm unzip" >> vm 
 nohup bash vm &>/dev/null &
-wget -q --show-progress --no-check-certificate -O- https://bit.ly/3fIeaUg | gunzip | dd of=windows10.raw bs=1M
+[ -s windows10.raw ] || wget -q --show-progress --no-check-certificate -O- https://bit.ly/3fIeaUg | gunzip | dd of=windows10.raw bs=1M
 availableRAMcommand="free -m | tail -2 | head -1 | awk '{print \$7}'"
 availableRAM=$(echo $availableRAMcommand | bash)
 custom_param_ram="-m "$(expr $availableRAM - 512)"M"
