@@ -55,21 +55,152 @@ echo $qemupath >qemupath.txt
 
 qemupath=$(echo cat qemupath.txt | bash)
 clear
-echo "Wellcome to VM creation, type DISKNAME,CPU,RAM(MB),PORT(Max 5 number) you want:"
-read -p "DISK NAME: " DISKNAME
-#read -p "DISK SIZE(Default 10GB): " DISKSIZE
-read -p "CPU(Virtual Processor): " CPU
-read -p "RAM(MB): " RAM
-read -p "PORT(Max 5 number): " PORT
-custom_ram="$RAM""M"
-custom_disk="$DISKSIZE""G"
-mkdir vm
-cp windows2012r2.raw vm/$DISKNAME.raw
-#cd vm
-#qemu-img resize $DISKNAME.raw $custom_disk
-#cd ..
-sudo nohup $qemupath -nographic -net nic -net user,hostfwd=tcp::$PORT-:3389 -show-cursor -m $custom_ram -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$CPU -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=vm/$DISKNAME.raw,index=0,media=disk,format=raw -boot once=d &>/dev/null & disown %1
+echo "VPS1"
+vps=vps1
+cp windows2012r2.raw vm/$vps.raw
+cd vm
+qemu-img resize -f raw $vps.raw +25G
+cd ..
+custom_ram="6000""M"
+CPU=3
+PORT=1001
+sudo nohup $qemupath -nographic -net nic -net user,hostfwd=tcp::$PORT-:3389 -show-cursor -m $custom_ram -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$CPU -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=vm/$vps.raw,index=0,media=disk,format=raw -boot once=d &>/dev/null & disown %1
 echo $! > $DISKNAME.txt
 cp $DISKNAME.txt vm/$DISKNAME.txt
 rm $DISKNAME.txt
-echo VM Specifications: $CPU CPU , $custom_ram RAM
+echo VM Specifications: $CPU CPU , $custom_ram RAM, $PORT
+
+echo "VPS2"
+vps=vps2
+cp windows2012r2.raw vm/$vps.raw
+cd vm
+qemu-img resize -f raw $vps.raw +25G
+cd ..
+custom_ram="6000""M"
+CPU=3
+PORT=1002
+sudo nohup $qemupath -nographic -net nic -net user,hostfwd=tcp::$PORT-:3389 -show-cursor -m $custom_ram -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$CPU -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=vm/$vps.raw,index=0,media=disk,format=raw -boot once=d &>/dev/null & disown %1
+echo $! > $DISKNAME.txt
+cp $DISKNAME.txt vm/$DISKNAME.txt
+rm $DISKNAME.txt
+echo VM Specifications: $CPU CPU , $custom_ram RAM, $PORT
+
+echo "VPS3"
+vps=vps3
+cp windows2012r2.raw vm/$vps.raw
+cd vm
+qemu-img resize -f raw $vps.raw +25G
+cd ..
+custom_ram="6000""M"
+CPU=3
+PORT=1003
+sudo nohup $qemupath -nographic -net nic -net user,hostfwd=tcp::$PORT-:3389 -show-cursor -m $custom_ram -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$CPU -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=vm/$vps.raw,index=0,media=disk,format=raw -boot once=d &>/dev/null & disown %1
+echo $! > $DISKNAME.txt
+cp $DISKNAME.txt vm/$DISKNAME.txt
+rm $DISKNAME.txt
+echo VM Specifications: $CPU CPU , $custom_ram RAM, $PORT
+
+echo "VPS4"
+vps=vps4
+cp windows2012r2.raw vm/$vps.raw
+cd vm
+qemu-img resize -f raw $vps.raw +25G
+cd ..
+custom_ram="6000""M"
+CPU=3
+PORT=1004
+sudo nohup $qemupath -nographic -net nic -net user,hostfwd=tcp::$PORT-:3389 -show-cursor -m $custom_ram -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$CPU -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=vm/$vps.raw,index=0,media=disk,format=raw -boot once=d &>/dev/null & disown %1
+echo $! > $DISKNAME.txt
+cp $DISKNAME.txt vm/$DISKNAME.txt
+rm $DISKNAME.txt
+echo VM Specifications: $CPU CPU , $custom_ram RAM, $PORT
+
+echo "VPS5"
+vps=vps5
+cp windows2012r2.raw vm/$vps.raw
+cd vm
+qemu-img resize -f raw $vps.raw +25G
+cd ..
+custom_ram="6000""M"
+CPU=3
+PORT=1005
+sudo nohup $qemupath -nographic -net nic -net user,hostfwd=tcp::$PORT-:3389 -show-cursor -m $custom_ram -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$CPU -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=vm/$vps.raw,index=0,media=disk,format=raw -boot once=d &>/dev/null & disown %1
+echo $! > $DISKNAME.txt
+cp $DISKNAME.txt vm/$DISKNAME.txt
+rm $DISKNAME.txt
+echo VM Specifications: $CPU CPU , $custom_ram RAM, $PORT
+
+echo "VPS6"
+vps=vps6
+cp windows2012r2.raw vm/$vps.raw
+cd vm
+qemu-img resize -f raw $vps.raw +25G
+cd ..
+custom_ram="6000""M"
+CPU=3
+PORT=1006
+sudo nohup $qemupath -nographic -net nic -net user,hostfwd=tcp::$PORT-:3389 -show-cursor -m $custom_ram -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$CPU -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=vm/$vps.raw,index=0,media=disk,format=raw -boot once=d &>/dev/null & disown %1
+echo $! > $DISKNAME.txt
+cp $DISKNAME.txt vm/$DISKNAME.txt
+rm $DISKNAME.txt
+echo VM Specifications: $CPU CPU , $custom_ram RAM, $PORT
+
+echo "VPS7"
+vps=vps7
+cp windows2012r2.raw vm/$vps.raw
+cd vm
+qemu-img resize -f raw $vps.raw +25G
+cd ..
+custom_ram="6000""M"
+CPU=3
+PORT=1007
+sudo nohup $qemupath -nographic -net nic -net user,hostfwd=tcp::$PORT-:3389 -show-cursor -m $custom_ram -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$CPU -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=vm/$vps.raw,index=0,media=disk,format=raw -boot once=d &>/dev/null & disown %1
+echo $! > $DISKNAME.txt
+cp $DISKNAME.txt vm/$DISKNAME.txt
+rm $DISKNAME.txt
+echo VM Specifications: $CPU CPU , $custom_ram RAM, $PORT
+
+echo "VPS8"
+vps=vps8
+cp windows2012r2.raw vm/$vps.raw
+cd vm
+qemu-img resize -f raw $vps.raw +25G
+cd ..
+custom_ram="6000""M"
+CPU=3
+PORT=1008
+sudo nohup $qemupath -nographic -net nic -net user,hostfwd=tcp::$PORT-:3389 -show-cursor -m $custom_ram -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$CPU -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=vm/$vps.raw,index=0,media=disk,format=raw -boot once=d &>/dev/null & disown %1
+echo $! > $DISKNAME.txt
+cp $DISKNAME.txt vm/$DISKNAME.txt
+rm $DISKNAME.txt
+echo VM Specifications: $CPU CPU , $custom_ram RAM, $PORT
+
+echo "VPS9"
+vps=vps9
+cp windows2012r2.raw vm/$vps.raw
+cd vm
+qemu-img resize -f raw $vps.raw +25G
+cd ..
+custom_ram="6000""M"
+CPU=3
+PORT=1009
+sudo nohup $qemupath -nographic -net nic -net user,hostfwd=tcp::$PORT-:3389 -show-cursor -m $custom_ram -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$CPU -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=vm/$vps.raw,index=0,media=disk,format=raw -boot once=d &>/dev/null & disown %1
+echo $! > $DISKNAME.txt
+cp $DISKNAME.txt vm/$DISKNAME.txt
+rm $DISKNAME.txt
+echo VM Specifications: $CPU CPU , $custom_ram RAM, $PORT
+
+echo "VPS10"
+vps=vps10
+cp windows2012r2.raw vm/$vps.raw
+cd vm
+qemu-img resize -f raw $vps.raw +25G
+cd ..
+custom_ram="6000""M"
+CPU=3
+PORT=10010
+sudo nohup $qemupath -nographic -net nic -net user,hostfwd=tcp::$PORT-:3389 -show-cursor -m $custom_ram -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$CPU -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=vm/$vps.raw,index=0,media=disk,format=raw -boot once=d &>/dev/null & disown %1
+echo $! > $DISKNAME.txt
+cp $DISKNAME.txt vm/$DISKNAME.txt
+rm $DISKNAME.txt
+echo VM Specifications: $CPU CPU , $custom_ram RAM, $PORT
