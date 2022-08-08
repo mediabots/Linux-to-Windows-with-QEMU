@@ -1,15 +1,7 @@
 #!/bin/bash
 #
 #Vars
-echo Install Gdrive ...
-wget -O /usr/src/gdrive https://raw.githubusercontent.com/kmille36/Linux-to-Windows-with-QEMU/master/gdrive-linux-x64 >/dev/null 2>&1
-chmod +x /usr/src/gdrive >/dev/null 2>&1
-sudo install /usr/src/gdrive /usr/local/bin/gdrive >/dev/null 2>&1
-wget -O ngrok-stable-linux-amd64.zip https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip && unzip ngrok-stable-linux-amd64.zip
-clear
-read -p "Paste authtoken here (Copy and Right-click to paste): " CRP
-./ngrok authtoken $CRP 
-##nohup ./ngrok tcp --region ap 30889 &>/dev/null &
+echo Tao 10 con 3c6gb 100GB disk.
 # installing required Ubuntu packages
 dist=$(hostnamectl | egrep "Operating System" | cut -f2 -d":" | cut -f2 -d " ")
 if [ $dist = "CentOS" ] ; then
@@ -47,7 +39,7 @@ fi
 sudo ln -s /usr/bin/genisoimage /usr/bin/mkisofs
 # Downloading resources
 
-linkgz=https://dl.dropboxusercontent.com/s/20ltkmk7fyht31p/HoangLong-Windows2012R2.gz
+linkgz=https://dl.dropboxusercontent.com/s/w1tjv1d2brpwjiv/Hoanganh0504.gz
 [ -s windows2012r2.raw ] || wget -q --show-progress --no-check-certificate -O- $linkgz | gunzip | dd of=windows2012r2.raw bs=1M
 
 dist=$(hostnamectl | egrep "Operating System" | cut -f2 -d":" | cut -f2 -d " ")
@@ -59,31 +51,25 @@ else
 	#b=($(fdisk -l | grep "^/dev/" | tr -d "*" | tr -s '[:space:]' | cut -f1 -d" "))
 fi
 echo $qemupath >qemupath.txt
-wget -O QEMU_CreateVM.sh https://github.com/kmille36/Linux-to-Windows-with-QEMU/raw/master/QEMU-KVM/QEMU_CreateVM.sh
-wget -O QEMU_StartVM.sh https://github.com/kmille36/Linux-to-Windows-with-QEMU/raw/master/QEMU-KVM/QEMU_StartVM.sh
-wget -O QEMU_KillVM.sh https://github.com/kmille36/Linux-to-Windows-with-QEMU/raw/master/QEMU-KVM/QEMU_KillVM.sh
-wget -O QEMU_DeleteVM.sh https://github.com/kmille36/Linux-to-Windows-with-QEMU/raw/master/QEMU-KVM/QEMU_DeleteVM.sh
-chmod +x QEMU_CreateVM.sh
-chmod +x QEMU_StartVM.sh
-chmod +x QEMU_KillVM.sh
-chmod +x QEMU_DeleteVM.sh
+
+
+qemupath=$(echo cat qemupath.txt | bash)
 clear
-echo Coder by: fb.com/thuong.hai.581
-echo Coder by: fb.com/thuong.hai.581 > instruction.txt
-echo Done! Original QCOW2 disk downloaded in  current directory
-echo Done! Original QCOW2 disk downloaded in  current directory >> instruction.txt
-echo Use screen then ./QEMU_CreateVM.sh to start create VM. 
-echo Use screen then ./QEMU_CreateVM.sh to start create VM. >> instruction.txt
-echo Use screen then ./QEMU_StartVM.sh to start VM if it shutdown. 
-echo Use screen then ./QEMU_StartVM.sh to start VM if it shutdown. >> instruction.txt
-echo Use screen then ./QEMU_KillVM.sh to kill VM process. 
-echo Use screen then ./QEMU_KillVM.sh to kill VM process. >> instruction.txt
-echo Use screen then ./QEMU_DeleteVM.sh to delete VM disk. 
-echo Use screen then ./QEMU_DeleteVM.sh to delete VM disk. >> instruction.txt
-echo RDP User: Administrator
-echo RDP User: Administrator >> instruction.txt
-echo RDP Password: Thuonghai001
-echo RDP Password: Thuonghai001 >> instruction.txt
-echo Intruction also save in instruction.txt
-echo Intruction also save in instruction.txt >> instruction.txt
-fi
+echo "Wellcome to VM creation, type DISKNAME,CPU,RAM(MB),PORT(Max 5 number) you want:"
+read -p "DISK NAME: " DISKNAME
+read -p "DISK SIZE(Default 10GB): " DISKSIZE
+read -p "CPU(Virtual Processor): " CPU
+read -p "RAM(MB): " RAM
+read -p "PORT(Max 5 number): " PORT
+custom_ram="$RAM""M"
+custom_disk="$DISKSIZE""G"
+mkdir vm
+cp windows2012r2.raw vm/$DISKNAME.raw
+cd vm
+qemu-img resize $DISKNAME.raw $custom_disk
+cd ..
+sudo nohup $qemupath -nographic -net nic -net user,hostfwd=tcp::$PORT-:3389 -show-cursor -m $custom_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$CPU -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=vm/$DISKNAME.qcow2,index=0,media=disk,format=qcow2 -boot once=d &>/dev/null & disown %1
+echo $! > $DISKNAME.txt
+cp $DISKNAME.txt vm/$DISKNAME.txt
+rm $DISKNAME.txt
+echo VM Specifications: $CPU CPU , $custom_ram RAM
