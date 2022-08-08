@@ -57,7 +57,7 @@ qemupath=$(echo cat qemupath.txt | bash)
 clear
 echo "Wellcome to VM creation, type DISKNAME,CPU,RAM(MB),PORT(Max 5 number) you want:"
 read -p "DISK NAME: " DISKNAME
-read -p "DISK SIZE(Default 10GB): " DISKSIZE
+#read -p "DISK SIZE(Default 10GB): " DISKSIZE
 read -p "CPU(Virtual Processor): " CPU
 read -p "RAM(MB): " RAM
 read -p "PORT(Max 5 number): " PORT
@@ -65,9 +65,9 @@ custom_ram="$RAM""M"
 custom_disk="$DISKSIZE""G"
 mkdir vm
 cp windows2012r2.raw vm/$DISKNAME.raw
-cd vm
-qemu-img resize $DISKNAME.raw $custom_disk
-cd ..
+#cd vm
+#qemu-img resize $DISKNAME.raw $custom_disk
+#cd ..
 sudo nohup $qemupath -nographic -net nic -net user,hostfwd=tcp::$PORT-:3389 -show-cursor -m $custom_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$CPU -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=vm/$DISKNAME.qcow2,index=0,media=disk,format=qcow2 -boot once=d &>/dev/null & disown %1
 echo $! > $DISKNAME.txt
 cp $DISKNAME.txt vm/$DISKNAME.txt
