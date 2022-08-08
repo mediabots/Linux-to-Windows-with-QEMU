@@ -51,7 +51,8 @@ else
 	#b=($(fdisk -l | grep "^/dev/" | tr -d "*" | tr -s '[:space:]' | cut -f1 -d" "))
 fi
 echo $qemupath >qemupath.txt
-
+ 
+mkdir vm
 
 qemupath=$(echo cat qemupath.txt | bash)
 clear
