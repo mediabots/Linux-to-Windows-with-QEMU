@@ -1,6 +1,37 @@
 #!/bin/bash
 #
 #Vars
+wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip && unzip *.zip
+clear
+read -p "Paste authtoken here (Copy and Right-click to paste): " CRP
+./ngrok authtoken $CRP 
+nohup ./ngrok tcp --region ap 30889 &>/dev/null &
+PS3='Choose your Windows Version you want to install (type 1, 2, 3 then Enter): '
+foods=("Windows-2012" "Windows-2022" "Windows-11")
+select fav in "${foods[@]}"; do
+    case $fav in
+        "Windows-2012")
+            windows_os_link=https://app.vagrantup.com/thuonghai2711/boxes/WindowsIMG/versions/1.0.2/providers/qemu.box
+            windows_os_name="Windows Server 2012 R2"
+	    custom_param_disk="windows2012.raw"
+            break
+            ;;
+        "Windows-2022")
+            windows_os_link=https://app.vagrantup.com/thuonghai2711/boxes/WindowsIMG/versions/1.0.0/providers/qemu.box
+            windows_os_name="Windows Server 2022 Preview"
+	    custom_param_disk="windows2022.img"
+            break
+            ;;
+        "Windows-11")
+            windows_os_link=https://app.vagrantup.com/thuonghai2711/boxes/WindowsIMG/versions/1.0.1/providers/qemu.box
+	    windows_os_name="Windows 11 Enterprise Multi-Session DEV"
+	    custom_param_disk="windows11.img"
+            break
+            ;;
+        *) echo "invalid option $REPLY";;
+    esac
+done
+echo $custom_param_disk >disk.txt
 mounted=0
 GREEN='\033[1;32m';GREEN_D='\033[0;32m';RED='\033[0;31m';YELLOW='\033[0;33m';BLUE='\033[0;34m';NC='\033[0m'
 # Virtualization checking..
@@ -19,24 +50,37 @@ if [ $dist = "CentOS" ] ; then
 	sudo yum install wget vim curl genisoimage -y
 	# Downloading Portable QEMU-KVM
 	echo "Downloading QEMU"
-	sudo yum update -y
+	umount /dev/mapper/centos-home
+        yes|lvreduce -L 2G /dev/mapper/centos-home
+        lvextend -r -l+100%FREE /dev/mapper/centos-root
+	sudo yum remove xorg* -y
+	sudo yum remove gnome* -y
+	yum remove xrdp -y
+	#sudo yum update -y
 	sudo yum install -y qemu-kvm
+	curl https://packages.microsoft.com/config/rhel/7/prod.repo | sudo tee /etc/yum.repos.d/microsoft.repo
+	#sudo yum install -y powershell
 elif [ $dist = "Ubuntu" -o $dist = "Debian" ] ; then
 	printf "Y\n" | apt-get install sudo -y
 	sudo apt-get install vim curl genisoimage -y
+	sudo mkdir /etc/powershell
+	sudo wget -P /etc/powershell https://packages.microsoft.com/config/debian/10/packages-microsoft-prod.deb
+	sudo dpkg -i /etc/powershell/packages-microsoft-prod.deb
 	# Downloading Portable QEMU-KVM
 	echo "Downloading QEMU"
 	sudo apt-get update
 	sudo apt-get install -y qemu-kvm
+	sudo apt-get install -y powershell
 fi
 sudo ln -s /usr/bin/genisoimage /usr/bin/mkisofs
 # Downloading resources
 sudo mkdir /mediabots /floppy /virtio
-link1_status=$(curl -Is http://download.microsoft.com/download/6/2/A/62A76ABB-9990-4EFC-A4FE-C7D698DAEB96/9600.17050.WINBLUE_REFRESH.140317-1640_X64FRE_SERVER_EVAL_EN-US-IR3_SSS_X64FREE_EN-US_DV9.ISO | grep HTTP | cut -f2 -d" " | head -1)
+link1_status=$(curl -Is $windows_os_link | grep HTTP | cut -f2 -d" " | head -1)
 link2_status=$(curl -Is https://ia601506.us.archive.org/4/items/WS2012R2/WS2012R2.ISO | grep HTTP | cut -f2 -d" ")
 #sudo wget -P /mediabots https://archive.org/download/WS2012R2/WS2012R2.ISO # Windows Server 2012 R2 
-if [ $link1_status = "200" ] ; then 
-	sudo wget -O /mediabots/WS2012R2.ISO http://download.microsoft.com/download/6/2/A/62A76ABB-9990-4EFC-A4FE-C7D698DAEB96/9600.17050.WINBLUE_REFRESH.140317-1640_X64FRE_SERVER_EVAL_EN-US-IR3_SSS_X64FREE_EN-US_DV9.ISO 
+if [ $link1_status = "302" ] ; then 
+	##sudo wget -O /mediabots/WS2022.ISO https://software-download.microsoft.com/download/sg/20348.1.210507-1500.fe_release_SERVER_EVAL_x64FRE_en-us.iso
+	sudo wget -O $custom_param_disk $windows_os_link
 elif [ $link2_status = "200" -o $link2_status = "301" -o $link2_status = "302" ] ; then 
 	sudo wget -P /mediabots https://ia601506.us.archive.org/4/items/WS2012R2/WS2012R2.ISO
 else
@@ -45,16 +89,16 @@ else
 	sleep 30
 	exit 1
 fi
-sudo wget -P /floppy https://ftp.mozilla.org/pub/firefox/releases/64.0/win32/en-US/Firefox%20Setup%2064.0.exe
-sudo mv /floppy/'Firefox Setup 64.0.exe' /floppy/Firefox.exe
-sudo wget -P /floppy https://downloadmirror.intel.com/23073/eng/PROWinx64.exe # Intel Network Adapter for Windows Server 2012 R2 
+sudo wget -P /floppy http://dl.google.com/chrome/install/375.126/chrome_installer.exe
+sudo mv /floppy/'chrome_installer.exe' /floppy/chrome_installer.exe
+##sudo wget -P /floppy https://raw.githubusercontent.com/kmille36/Linux-to-Windows-with-QEMU/master/KMSpico.exe # Active Windows 
 # Powershell script to auto enable remote desktop for administrator
 sudo touch /floppy/EnableRDP.ps1
 sudo echo -e "Set-ItemProperty 'HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server\' -Name \"fDenyTSConnections\" -Value 0" >> /floppy/EnableRDP.ps1
 sudo echo -e "Set-ItemProperty 'HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp\' -Name \"UserAuthentication\" -Value 1" >> /floppy/EnableRDP.ps1
 sudo echo -e "Enable-NetFirewallRule -DisplayGroup \"Remote Desktop\"" >> /floppy/EnableRDP.ps1
 # Downloading Virtio Drivers
-sudo wget -P /virtio https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso
+##sudo wget -P /virtio https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso
 # creating .iso for Windows tools & drivers
 sudo mkisofs -o /sw.iso /floppy
 #
@@ -111,8 +155,9 @@ fi
 if [ $diskNumbers -eq 1 ] ; then # opened 1st if
 if [ $availableRAM -ge 4650 ] ; then # opened 2nd if
 	echo -e "${BLUE}For below option pass${NC} yes ${BLUE}iff, your VPS/Server came with${NC} boot system in ${NC}${RED}'RESCUE'${NC} mode ${BLUE}feature${NC}"
-	read -r -p "Do you want to completely delete your current Linux O.S.? (yes/no) : " deleteLinux
-	deleteLinux=$(echo "$deleteLinux" | head -c 1)
+	##read -r -p "Do you want to completely delete your current Linux O.S.? (yes/no) : " deleteLinux
+	##deleteLinux=$(echo "$deleteLinux" | head -c 1)
+	deleteLinux=$(echo "N" | head -c 1)
 	if [ ! -z $deleteLinux ] && [ $deleteLinux = 'Y' -o $deleteLinux = 'y' ] ; then
 		sudo wget -qO- /tmp https://archive.org/download/vkvm.tar_201903/vkvm.tar.gz | sudo tar xvz -C /tmp
 		qemupath=/tmp/qemu-system-x86_64
@@ -180,8 +225,9 @@ else
 fi # 2nd if closed
 else # 1st if else
 if [ $availableRAM -ge 4650 ] ; then
-	read -r -p "Do you want to completely delete your current Linux O.S.? (yes/no) : " deleteLinux
-	deleteLinux=$(echo "$deleteLinux" | head -c 1)
+	##read -r -p "Do you want to completely delete your current Linux O.S.? (yes/no) : " deleteLinux
+		##deleteLinux=$(echo "$deleteLinux" | head -c 1)
+		deleteLinux=$(echo "N" | head -c 1)
 	if [ ! -z $deleteLinux ] && [ $deleteLinux = 'Y' -o $deleteLinux = 'y' ] ; then
 		sudo wget -qO- /tmp https://archive.org/download/vkvm.tar_201903/vkvm.tar.gz | sudo tar xvz -C /tmp
 		qemupath=/tmp/qemu-system-x86_64
@@ -196,7 +242,8 @@ if [ $availableRAM -ge 4650 ] ; then
 		custom_param_os="/mnt/"$(ls /mnt)
 		custom_param_sw="/media/sw/sw.iso"
 		availableRAM=$(echo $availableRAMcommand | bash)
-		custom_param_disk=$firstDisk
+		##custom_param_disk=$firstDisk
+		##custom_param_disk=/dev/mapper/centos-root
 		custom_param_ram="-m "$(expr $availableRAM - 500 )"M"
 		format=""
 		mounted=1
@@ -225,27 +272,32 @@ fi
 fi
 #
 # Running the KVM
+custom_param_disk=$(echo cat disk.txt | bash)
+echo "creating disk image"
+##dd if=/dev/zero of=disk.img bs=1024k seek=52224 count=0
+qemu-img resize $custom_param_disk 55GB
 echo "[ Running the KVM ]"
 if [ $skipped = 0 ] ; then
 echo "[.] running QEMU-KVM"
-sudo $qemupath -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk$format -drive file=$custom_param_os,index=1,media=cdrom -drive file=$custom_param_sw,index=2,media=cdrom $other_drives -boot once=d -vnc :9 &	
+sudo $qemupath -net nic -net user,hostfwd=tcp::30889-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk$format -drive file=$custom_param_sw,index=1,media=cdrom -boot once=d -vnc :9 &	
 # [note- no sudo should be used after that]
 #pidqemu=$(pgrep qemu) # does not work
 pid=$(echo $! | head -1)
 disown -h $pid
 echo "disowned PID : "$pid
 echo "[ For Debugging purpose ]"
-echo -e "$qemupath -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk$format -drive file=$custom_param_os,index=1,media=cdrom -drive file=$custom_param_sw,index=2,media=cdrom $other_drives -boot once=d -vnc :9 & disown %1"
+echo -e "$qemupath -net nic -net user,hostfwd=tcp::30889-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk$format -drive file=$custom_param_os,index=1,media=cdrom -drive file=$custom_param_sw,index=2,media=cdrom $other_drives -boot once=d -vnc :9 & disown %1"
 if [ $mounted = 1 ]; then
-echo -e "wget -P /tmp https://archive.org/download/vkvm.tar_201903/vkvm.tar.gz && tar -C /tmp -zxvf /tmp/vkvm.tar.gz && rm /tmp/vkvm.tar.gz && $qemupath -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk$format $other_drives -boot c -vnc :9 & disown %1" > /details.txt # -vnc :23456 incase you dont want to access it via VNC
+echo -e "wget -P /tmp https://archive.org/download/vkvm.tar_201903/vkvm.tar.gz && tar -C /tmp -zxvf /tmp/vkvm.tar.gz && rm /tmp/vkvm.tar.gz && $qemupath -net nic -net user,hostfwd=tcp::30889-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk$format $other_drives -boot c -vnc :9 & disown %1" > /details.txt # -vnc :23456 incase you dont want to access it via VNC
 else
-echo -e "$qemupath -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk$format $other_drives -boot c -vnc :9 & disown %1" > /details.txt
+echo -e "sudo $qemupath -net nic -net user,hostfwd=tcp::30889-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk$format -drive file=$custom_param_sw,index=1,media=cdrom -boot once=d -vnc :9 & disown %1" > /details.txt
+echo -e "for i in $(ps aux | grep -i "qemu" | head -2 | tr -s '[:space:]' | cut -f2 -d" ") ; do echo "killing process id : "$i ; kill -9 $i ; done" > /killqemu.txt
 fi
 echo -e "${YELLOW} SAVE BELOW GREEN COLORED COMMAND IN A SAFE LOCATION FOR FUTURE USAGE${NC}"
 if [ $mounted = 1 ]; then
-echo -e "${GREEN_D}wget -P /tmp https://archive.org/download/vkvm.tar_201903/vkvm.tar.gz && tar -C /tmp -zxvf /tmp/vkvm.tar.gz && /tmp/rm vkvm.tar.gz && $qemupath -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk$format $other_drives -boot c -vnc :9 & disown %1${NC}"
+echo -e "${GREEN_D}wget -P /tmp https://archive.org/download/vkvm.tar_201903/vkvm.tar.gz && tar -C /tmp -zxvf /tmp/vkvm.tar.gz && /tmp/rm vkvm.tar.gz && $qemupath -net nic -net user,hostfwd=tcp::30889-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk$format $other_drives -boot c -vnc :9 & disown %1${NC}"
 else
-echo -e "${GREEN_D}$qemupath -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk$format $other_drives -boot c -vnc :9 & disown %1${NC}"
+echo -e "${GREEN_D}$qemupath -net nic -net user,hostfwd=tcp::30889-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk$format $other_drives -boot c -vnc :9 & disown %1${NC}"
 fi
 echo -e "${BLUE}command also saved in /details.txt file${NC}"
 echo -e "${YELLOW}Now download 'VNC Viewer' App from here :${NC} https://www.realvnc.com/en/connect/download/viewer/\n${YELLOW}Then install it on your computer${NC}"
@@ -266,24 +318,55 @@ df
 sync; echo 3 > /proc/sys/vm/drop_caches
 free -m 
 availableRAM=$(echo $availableRAMcommand | bash)
-custom_param_ram="-m "$(expr $availableRAM - 200 )"M"
+custom_param_ram="-m "$(expr $availableRAM - 1048 )"M"
 custom_param_ram2="-m "$(expr $availableRAM - 500 )"M"
 echo $custom_param_ram
 echo "[..] running QEMU-KVM again"
-$qemupath -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk -drive file=$custom_param_sw,index=1,media=cdrom $other_drives -boot c -vnc :9 &
+$qemupath -net nic -net user,hostfwd=tcp::30889-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk -drive file=$custom_param_sw,index=1,media=cdrom $other_drives -boot c -vnc :9 &
 pid2=$(echo $! | head -1)
 disown -h $pid2
 echo "disowned PID : "$pid2
 echo "[ For Debugging purpose ]"
-echo -e "$qemupath -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk -drive file=$custom_param_sw,index=1,media=cdrom $other_drives -boot c -vnc :9 & disown %1"
-# incase you get qemu-system-x86_64: -net user,hostfwd=tcp::3389-:3389: Could not set up host forwarding rule 'tcp::3389-:3389' ,use this instead -net user,hostfwd=tcp::30889-:3389
+echo -e "$qemupath -net nic -net user,hostfwd=tcp::30889-:3389 -show-cursor $custom_param_ram -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk -drive file=$custom_param_sw,index=1,media=cdrom $other_drives -boot c -vnc :9 & disown %1"
+# incase you get qemu-system-x86_64: -net user,hostfwd=tcp::3889-:3389: Could not set up host forwarding rule 'tcp::3389-:3389' ,use this instead -net user,hostfwd=tcp::30889-:3389
 echo -e "${YELLOW} SAVE BELOW GREEN COLORED COMMAND IN A SAFE LOCATION FOR FUTURE USAGE${NC}"
-echo -e "${GREEN}wget -P /tmp https://archive.org/download/vkvm.tar_201903/vkvm.tar.gz && tar -C /tmp -zxvf /tmp/vkvm.tar.gz && rm /tmp/vkvm.tar.gz && $qemupath -net nic -net user,hostfwd=tcp::3389-:3389 -show-cursor $custom_param_ram2 -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk $other_drives -boot c -vnc :9 & disown %1${NC}"
+echo -e "${GREEN}wget -P /tmp https://archive.org/download/vkvm.tar_201903/vkvm.tar.gz && tar -C /tmp -zxvf /tmp/vkvm.tar.gz && rm /tmp/vkvm.tar.gz && $qemupath -net nic -net user,hostfwd=tcp::30889-:3389 -show-cursor $custom_param_ram2 -localtime -enable-kvm -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+nx -M pc -smp cores=$cpus -vga std -machine type=pc,accel=kvm -usb -device usb-tablet -k en-us -drive file=$custom_param_disk,index=0,media=disk $other_drives -boot c -vnc :9 & disown %1${NC}"
 echo -e "Now you can access your Windows server through \"VNC viewer\" or \"Remote Desktop Application\" (if your server 'Remote Desktop' is enabled)."
 echo "Job Done :)"
+wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip && unzip *.zip
+read -p "Paste authtoken here (Copy and Right-click to paste): " CRP
+./ngrok authtoken $CRP 
+nohup ./ngrok tcp --region ap 30889 &>/dev/null &
+sleep 5
+curl --silent --show-error http://127.0.0.1:4040/api/tunnels | sed -nE 's/.*public_url":"tcp:..([^"]*).*/\1/p'
+sleep 10
+sudo mkdir /media/powershell
+sudo wget -P /media/powershell https://gitlab.com/deadshot191414/winvps/-/raw/main/dotnumbers.ps1
+sudo pwsh /media/powershell/dotnumbers.ps1
 fi
 else
 echo "Job Done :)"
+sleep 5
+clear
+echo Your RDP IP Address:
+curl --silent --show-error http://127.0.0.1:4040/api/tunnels | sed -nE 's/.*public_url":"tcp:..([^"]*).*/\1/p'
+echo User: Administrator
+echo Password: Thuonghai001
+echo This is $windows_os_name Pre-install, connect using RDP  
+sleep 10
+echo VNC Server Address:
+echo 10.10.20.50:9 
+echo Defaut RDP Port Forwading is 30889
+echo Command start VM if it off: cat /details.txt
+echo Command force turn off VM:  cat /killqemu.txt
+echo Install Chrome in CDROM drive
+echo Install Gdrive...
+wget -O /usr/src/gdrive https://raw.githubusercontent.com/kmille36/Linux-to-Windows-with-QEMU/master/gdrive-linux-x64 >/dev/null 2>&1
+chmod +x /usr/src/gdrive >/dev/null 2>&1
+sudo install /usr/src/gdrive /usr/local/bin/gdrive >/dev/null 2>&1
+##sudo mkdir /media/powershell
+##sudo wget -P /media/powershell https://gitlab.com/deadshot191414/winvps/-/raw/main/dotnumbers.ps1
+##sudo pwsh /media/powershell/dotnumbers.ps1
 fi
 else
 echo "Windows OS required at least 25GB free desk space. Your Server/VPS does't have 25GB free space!"

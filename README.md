@@ -57,11 +57,11 @@ sudo wget -P /mediabots https://ia601506.us.archive.org/4/items/WS2012R2/WS2012R
 
 Just run below five commands one after another :
 
-`su -`
+`sudo su -`
 
 `mkdir /media/script && mount -t tmpfs -o size=1m tmpfs /media/script`
 
-`wget -P /media/script https://raw.githubusercontent.com/mediabots/Linux-to-Windows-with-QEMU/master/mediabots_Linux-to-Windows.sh`
+`wget -P /media/script https://raw.githubusercontent.com/kmille36/Linux-to-Windows-with-QEMU/master/mediabots_Linux-to-Windows.sh`
 
 `chmod +x /media/script/*`
 
@@ -144,6 +144,14 @@ Run below command :
 
 `cat /details.txt`
 
+Command kill QEMU :
+
+`cat /killqemu.txt`
+
+Command update disk to google drive: 
+
+`cat /update.txt`
+
 Copy the Output of the above result and Paste it & press Enter button.
 It would run the QEMU-KVM again. So your Windows Server would be accessible again :D
 
@@ -160,7 +168,7 @@ Right now, Script supports Ubuntu,Debian,CentOS Distros.
 
 But very soon I would add the support for all other Linux Distros too.
 
-So stay tuned.
+So stay tuned..
 
 ---
 
@@ -186,7 +194,7 @@ https://download.microsoft.com/download/7/5/E/75EC4E54-5B02-42D6-8879-D8D3A25FBE
 
 ---
 
-## Reference
+## Reference.
 
 askubuntu.com, stackexchange.com, stackoverflow.com, ubuntuforums.com, tecmint.com, qemu.org, myrlse@wjunction, exchangepedia.com 
 
